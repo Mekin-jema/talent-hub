@@ -2,8 +2,7 @@
   "name": "talent-hub-backend",
   "version": "1.0.0",
   "description": "Backend for TalentHub job portal",
-  "main": "index.js",
-  "type": "module",
+  "main": "src/index.js",
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",

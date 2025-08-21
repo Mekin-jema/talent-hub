@@ -10,7 +10,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-   url      = "file:./talent-job.db"
+   url      = "file:./job.db"
 }
 
 
