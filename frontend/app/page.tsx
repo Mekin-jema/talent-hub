@@ -45,6 +45,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { ModeToggle } from "@/components/ui/mode-toggle";
+import Image from "next/image";
 
 // =======================
 // Interfaces
@@ -206,7 +207,7 @@ const Hero = ({
               {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
             <Link href="/" className="flex items-center gap-2">
-              <Briefcase className="h-6 w-6 text-primary" />
+             <Image src="/logo.png" alt="Logo" width={60} height={60} />
               <span className="text-xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
                 TalentHub
               </span>

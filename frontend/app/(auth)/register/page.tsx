@@ -11,9 +11,10 @@ import { Label } from "@/components/ui/label";
 import { Form } from "@/components/ui/form";
 import { InputField } from "@/components/FormFields";
 
-import {  SignupFormType, signupSchema } from "@/validation/signup.validation";
+import { SignupFormType, signupSchema } from "@/validation/signup.validation";
 import { GoogleIcon } from "@/components/icons/GoogleIcon";
 import { GithubIcon } from "@/components/icons/GithubIcon";
+import Image from "next/image";
 
 export default function SignupPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +33,7 @@ export default function SignupPage() {
   // ---- Social Logins ----
   const signUpWithGithub = async () => {
     startGithubTransition(async () => {
-//  Social Auth  implementation 
+      //  Social Auth  implementation 
     });
   };
 
@@ -61,18 +62,18 @@ export default function SignupPage() {
           className="bg-card m-auto h-fit w-full max-w-sm rounded-[calc(var(--radius)+.125rem)] border p-0.5 shadow-md dark:[--color-muted:var(--color-zinc-900)]"
         >
           <div className="p-8 ">
-            <div>
-              {/* <Link href="/" aria-label="go home">
-                {/* <LogoIcon className="h-6 w-6" /> */}
-              {/* </Link>  */}
-              <h1 className="mb-1 mt-4 text-xl font-semibold">
-                Create an Account
+            <div className="flex flex-col items-center ">
+              <Link href="/" aria-label="go home">
+                <Image src="/logo.png" alt="Logo" width={100} height={100} />
+              </Link>
+              <h1 className="text-lg font-semibold mt-2 text-center">
+                Sign up for <span className="font-bold">TalenJob</span>
               </h1>
-              <p className="text-sm">Welcome! Create an account to get started</p>
             </div>
 
+
             {/* Social Signup */}
-            <div className="mt-6 grid grid-cols-2 gap-3">
+            <div className=" grid grid-cols-2 gap-3">
               <Button
                 type="button"
                 variant="outline"
@@ -137,12 +138,12 @@ export default function SignupPage() {
           </div>
 
           {/* <div className="bg-muted rounded-(--radius) border p-3"> */}
-            <p className="text-accent-foreground text-center text-sm p-3">
-              Already have an account? {" "}
-              <Button asChild variant="link" className="px-2">
-                <Link href="/login">Sign In</Link>
-              </Button>
-            </p>
+          <p className=" text-center text-sm p-3">
+            Already have an account? {" "}
+            <Button asChild variant="link" className="px-2">
+              <Link href="/login">Sign In</Link>
+            </Button>
+          </p>
           {/* </div> */}
         </form>
       </Form>

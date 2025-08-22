@@ -14,11 +14,16 @@ import { InputField } from "@/components/FormFields";
 import { loginFormType, loginSchema } from "@/validation/login.validation";
 import { GoogleIcon } from "@/components/icons/GoogleIcon";
 import { GithubIcon } from "@/components/icons/GithubIcon";
+import { useAuthStore } from "@/store/useAuthStore";
+import Image from "next/image";
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGithubPending, startGithubTransition] = useTransition();
   const [isGooglePending, startGoogleTransition] = useTransition();
+
+  // import user store
+  const {signup} = useAuthStore();
 
   const form = useForm<loginFormType>({
     resolver: zodResolver(loginSchema),
@@ -59,14 +64,13 @@ export default function LoginPage() {
           className="bg-card m-auto h-fit w-full max-w-sm rounded-[calc(var(--radius)+.125rem)] border p-0.5 shadow-md dark:[--color-muted:var(--color-zinc-900)]"
         >
           <div className="p-8 pb-6">
-            <div>
-              {/* <Link href="/" aria-label="go home">
-                {/* <LogoIcon /> */} 
-              {/* </Link>  */}
+            <div className="flex flex-col items-center ">
+               <Link href="/" aria-label="go home">
+                 <Image src="/logo.png" alt="Logo" width={100} height={100} />
+               </Link>
               <h1 className="mb-1 mt-4 text-xl font-semibold">
-                Sign In to Tailark
+                Sign In to TalenJob
               </h1>
-              <p className="text-sm">Welcome back! Sign in to continue</p>
             </div>
 
             {/* Social Login */}
@@ -143,7 +147,7 @@ export default function LoginPage() {
           </div>
 
           {/* <div className="bg-muted rounded-(--radius) border p-3"> */}
-            <p className="text-accent-foreground text-center text-sm p-3">
+            <p className=" text-center text-sm p-3">
               Don't have an account?{" "}
               <Button asChild variant="link" className="px-2">
                 <Link href="/register">Create account</Link>
