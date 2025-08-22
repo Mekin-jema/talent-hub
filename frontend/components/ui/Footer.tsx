@@ -26,7 +26,7 @@ export function Footer() {
                 <span className="text-white font-bold text-lg">J</span>
               </div>
               <span className="text-xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-                JobFinder
+                TalentHub
               </span>
             </div>
             <p className="text-muted-foreground max-w-xs">
@@ -119,7 +119,7 @@ export function Footer() {
             </div>
             <div className="flex items-center space-x-2 text-muted-foreground">
               <Mail className="h-4 w-4" />
-              <span>hello@jobfinder.com</span>
+              <span>hello@TalentHub.com</span>
             </div>
           </div>
         </div>
@@ -127,7 +127,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="border-t py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
           <div className="flex items-center">
-            <p>© {new Date().getFullYear()} JobFinder. Made with</p>
+            <p>© {new Date().getFullYear()} TalentHub. Made with</p>
             <Heart className="h-4 w-4 mx-1 text-red-500 fill-current" />
             <p>for job seekers and employers.</p>
           </div>
