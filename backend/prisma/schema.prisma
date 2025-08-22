@@ -32,11 +32,20 @@ model User {
 
 model Job {
   id          String   @id @default(cuid())
-  title       String
-  description String
-  createdAt   DateTime @default(now())
+  title       String//
+  type        String?   // refer to Full-time  or Part-Time
+  description String?
+  requirements String?  //???
+  responsibilities String?  //??
+  location      String?
+  aboutCompany    String?
+  logo        String?
+  salary      Float?
+  posted      DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  
+  category    String ?
+  featured    Boolean @default(false)
+  skills      Skills[]  //????
   // Relationships
   createdBy   User     @relation("JobPoster", fields: [userId], references: [id])
   userId      String
@@ -72,4 +81,11 @@ enum ApplicationStatus {
   APPLIED
   SHORTLISTED
   REJECTED
+}
+
+model Skills {
+  id String @id @default(uuid())
+  name String
+  jobId String
+  job Job @relation(fields: [jobId], references: [id])
 }
