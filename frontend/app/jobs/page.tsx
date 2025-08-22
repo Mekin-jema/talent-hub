@@ -128,12 +128,13 @@ export default function AllJobsPage() {
   });
 
   const handleApply = (jobId: string) => {
+
     if (appliedJobs.includes(jobId)) {
       alert("You already applied for this job!");
       return;
     }
-    setAppliedJobs([...appliedJobs, jobId]);
-    alert("Application submitted!");
+
+    router.push(`/jobs/${jobId}`);
   };
 
   const handleSave = (jobId: string) => {
@@ -417,8 +418,8 @@ export default function AllJobsPage() {
                       </div>
                       <Button
                         size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
+                        onClick={() => {
+                         
                           handleApply(job.id);
                         }}
                         disabled={applied}

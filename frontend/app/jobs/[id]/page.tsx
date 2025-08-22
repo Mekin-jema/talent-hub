@@ -321,7 +321,7 @@ export default function JobDetailPage() {
                 {/* Sidebar */}
                 <div className="space-y-6">
                     {/* Apply Box */}
-                    <div className="bg-card rounded-lg p-6 shadow-sm border sticky top-6">
+                    <div className="bg-card rounded-lg p-6 shadow-sm border sticky top-6 left-2">
                         <div className="text-center mb-6">
                             <h3 className="font-semibold text-lg mb-2">Interested in this job?</h3>
                             <p className="text-muted-foreground text-sm">
