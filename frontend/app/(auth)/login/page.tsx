@@ -23,7 +23,7 @@ export default function LoginPage() {
   const [isGooglePending, startGoogleTransition] = useTransition();
 
   // import user store
-  const {signup} = useAuthStore();
+  const {login} = useAuthStore();
 
   const form = useForm<loginFormType>({
     resolver: zodResolver(loginSchema),
@@ -48,7 +48,8 @@ export default function LoginPage() {
 
   const onSubmit = async (data: loginFormType) => {
     try {
-   
+      login(data);
+      form.reset();
     } catch (error) {
       toast.error("Unexpected error occurred");
     } finally {

@@ -15,6 +15,7 @@ import { SignupFormType, signupSchema } from "@/validation/signup.validation";
 import { GoogleIcon } from "@/components/icons/GoogleIcon";
 import { GithubIcon } from "@/components/icons/GithubIcon";
 import Image from "next/image";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export default function SignupPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -29,6 +30,9 @@ export default function SignupPage() {
       password: "",
     },
   });
+
+  // auth sore
+  const {signup}=useAuthStore()
 
   // ---- Social Logins ----
   const signUpWithGithub = async () => {
@@ -47,6 +51,12 @@ export default function SignupPage() {
   const onSubmit = async (data: SignupFormType) => {
     try {
       //  Email Signup implementation
+      console.log("Signing up...",data);
+     const result = await signup(data);
+     if(result?.message){
+
+      form.reset();
+     }
     } catch (error) {
       toast.error("Unexpected error occurred");
     } finally {
