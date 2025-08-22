@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Form } from "@/components/ui/form";
 import { InputField } from "@/components/FormFields";
-import { authClient } from "@/lib/auth-client";
 
 import { loginFormType, loginSchema } from "@/validation/login.validation";
 import { GoogleIcon } from "@/components/icons/GoogleIcon";
@@ -32,41 +31,19 @@ export default function LoginPage() {
   // ---- Auth Handlers ----
   const signInWithGithub = async () => {
     startGithubTransition(async () => {
-      await authClient.signIn.social({
-        provider: "github",
-        callbackURL: "/dashboard",
-        fetchOptions: {
-          onSuccess: () => {toast.success("Signed in with GitHub")},
-          onError: (ctx) => {toast.error(ctx.error.message)},
-        },
-      });
+  
     });
   };
 
   const signInWithGoogle = async () => {
     startGoogleTransition(async () => {
-      await authClient.signIn.social({
-        provider: "google",
-        callbackURL: "/dashboard",
-        fetchOptions: {
-          onSuccess: () => {toast.success("Signed in with Google")},
-          onError: (ctx) => {toast.error(ctx.error.message)},
-        },
-      });
+
     });
   };
 
   const onSubmit = async (data: loginFormType) => {
     try {
-      await authClient.signIn.email(
-        { email: data.email, password: data.password, callbackURL: "/dashboard" },
-        {
-          onRequest: () => {toast.loading("Signing in...")},
-          onResponse: () => {toast.dismiss()},
-          onSuccess: () => {toast.success("Login successful!")},
-          onError: (ctx) => {toast.error(ctx.error.message || "Login failed")},
-        }
-      );
+   
     } catch (error) {
       toast.error("Unexpected error occurred");
     } finally {

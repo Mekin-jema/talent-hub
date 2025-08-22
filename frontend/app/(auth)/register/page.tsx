@@ -10,10 +10,6 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Form } from "@/components/ui/form";
 import { InputField } from "@/components/FormFields";
-import { authClient } from "@/lib/auth-client";
-// import { GoogleIcon } from "@/components/icons/GoogleIcon";
-// import { GithubIcon } from "@/components/icons/GithubIcon";
-// import { LogoIcon } from "@/components/logo";
 
 import {  SignupFormType, signupSchema } from "@/validation/signup.validation";
 import { GoogleIcon } from "@/components/icons/GoogleIcon";
@@ -36,42 +32,20 @@ export default function SignupPage() {
   // ---- Social Logins ----
   const signUpWithGithub = async () => {
     startGithubTransition(async () => {
-      await authClient.signIn.social({
-        provider: "github",
-        callbackURL: "/dashboard",
-        fetchOptions: {
-          onSuccess: () => {toast.success("Signed up with GitHub")},
-          onError: (ctx) => {toast.error(ctx.error.message)},
-        },
-      });
+//  Social Auth  implementation 
     });
   };
 
   const signUpWithGoogle = async () => {
     startGoogleTransition(async () => {
-      await authClient.signIn.social({
-        provider: "google",
-        callbackURL: "/dashboard",
-        fetchOptions: {
-          onSuccess: () => {toast.success("Signed up with Google")},
-          onError: (ctx) => {toast.error(ctx.error.message)},
-        },
-      });
+      //  Social Auth  implementation
     });
   };
 
   // ---- Email Signup ----
   const onSubmit = async (data: SignupFormType) => {
     try {
-      await authClient.signUp.email(
-        { email: data.email, password: data.password, name: data.name, callbackURL: "/dashboard" },
-        {
-          onRequest: () => {toast.loading("Creating account...")},
-          onResponse: () => {toast.dismiss()},
-          onSuccess: () => {toast.success("Account created successfully!")},
-          onError: (ctx) => {toast.error(ctx.error.message || "Signup failed")},
-        }
-      );
+      //  Email Signup implementation
     } catch (error) {
       toast.error("Unexpected error occurred");
     } finally {
