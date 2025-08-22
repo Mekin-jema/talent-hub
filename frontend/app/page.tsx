@@ -238,7 +238,7 @@ const Hero = ({
           </nav>
 
           {/* Actions */}
-          <div className="flex items-center space-x-3">
+          <div className=" items-center space-x-3 hidden md:flex">
             <Button variant="ghost" size="icon" className="md:hidden">
               <Search className="h-5 w-5" />
             </Button>
@@ -282,13 +282,20 @@ const Hero = ({
                     {link.label}
                   </Link>
                 ))}
-                {userRole === "employer" && (
-                  <Button asChild size="sm" className="w-full mt-4">
-                    <Link href="/employer/post-job" className="flex items-center gap-1">
-                      <Plus className="h-4 w-4" /> Post Job
-                    </Link>
-                  </Button>
-                )}
+   
+          <div className="flex flex-col gap-2 mt-4">
+            <Button asChild size="sm" className="w-full">
+              <Link href="/login" className="flex items-center gap-1">
+                <LogIn className="h-4 w-4" /> Login
+              </Link>
+            </Button>
+            <Button asChild size="sm" className="w-full">
+              <Link href="/register" className="flex items-center gap-1">
+                <UserPlus className="h-4 w-4" /> Register
+              </Link>
+            </Button>
+          </div>
+      
               </nav>
             </div>
           </div>
