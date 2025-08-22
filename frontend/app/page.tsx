@@ -12,22 +12,18 @@ import {
   Clock,
   Star,
   Quote,
-  Briefcase,
   LogIn,
   UserPlus,
-  Plus,
-  Menu,
   X,
-  Bell,
   Search,
-  LogOut,
   Facebook,
   Twitter,
   Instagram,
   Mail,
   Phone,
   Heart,
-  LinkedinIcon
+  LinkedinIcon,
+  Menu
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -192,10 +188,10 @@ const Hero = ({
   const handleLogout = () => console.log("Logging out...");
 
   return (
-    <>
+    <div className="relative  top-4">
       {/* ======================= Navbar ======================= */}
       <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur border-b supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto flex items-center justify-between py-1 px-4 md:px-0">
+        <div className="container mx-auto flex items-center justify-between py-1  md:px-0">
           {/* Logo & Mobile Toggle */}
           <div className="flex items-center gap-4">
             <Button
@@ -206,7 +202,7 @@ const Hero = ({
             >
               {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
-            <Link href="/" className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2 pl-5">
              <Image src="/logo.png" alt="Logo" width={60} height={60} />
               <span className="text-xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
                 TalentHub
@@ -245,14 +241,14 @@ const Hero = ({
             </Button>
 
               <div className="flex items-center space-x-2">
-                <Button asChild variant="secondary" size="sm">
-                  <Link href="/login" className="flex items-center gap-1">
-                    <LogIn className="h-4 w-4" /> Login
+                <Button asChild size="sm" className="">
+                  <Link href="/login" className="flex items-center gap-1 px-5">
+                   Login
                   </Link>
                 </Button>
-                <Button asChild size="sm">
-                  <Link href="/register" className="flex items-center gap-1">
-                    <UserPlus className="h-4 w-4" /> Register
+                <Button asChild size="sm" variant="outline">
+                  <Link href="/register" className="flex items-center gap-1 px-6">
+                   Register
                   </Link>
                 </Button>
               </div>
@@ -475,13 +471,13 @@ const Hero = ({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 py-12">
             {/* Company Info */}
             <div className="space-y-4">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">J</span>
-                </div>
-                <span className="text-xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-                  TalentHub
-                </span>
+              <div className="flex items-start space-x-2">
+              <Link href="/" className="flex items-center gap-2">
+             <Image src="/logo.png" alt="Logo" width={60} height={60} />
+              <span className="text-xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                TalentHub
+              </span>
+            </Link>
               </div>
               <p className="text-muted-foreground max-w-xs">
                 Connecting talented professionals with amazing opportunities. Find your dream job or the perfect candidate.
@@ -552,7 +548,7 @@ const Hero = ({
           </div>
         </div>
       </footer>
-    </>
+    </div>
   );
 };
 

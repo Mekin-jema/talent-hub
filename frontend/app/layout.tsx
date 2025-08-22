@@ -18,33 +18,33 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    default: "aTalent Hub",
-    template: "%s | aTalent Hub",
+    default: "Talent Hub",
+    template: "%s | Talent Hub",
   },
   description:
-    "aTalent Hub is a modern job portal that connects employers with top talent, offering a streamlined experience for job seekers and recruiters.",
+    "Talent Hub is a modern job portal that connects employers with top talent, offering a streamlined experience for job seekers and recruiters.",
   robots: { index: true, follow: true },
   openGraph: {
     url: "https://www.atalenthub.com",
     title: "aTalent Hub",
     description:
-      "aTalent Hub is a modern job portal that connects employers with top talent, offering a streamlined experience for job seekers and recruiters.",
-    siteName: "aTalent Hub",
+      "Talent Hub is a modern job portal that connects employers with top talent, offering a streamlined experience for job seekers and recruiters.",
+    siteName: "Talent Hub",
     images: ["https://www.atalenthub.com/logo.png"], // replace with your real logo
     type: "website",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "aTalent Hub",
+    title: "Talent Hub",
     description:
-      "aTalent Hub is a modern job portal that connects employers with top talent, offering a streamlined experience for job seekers and recruiters.",
+      "Talent Hub is a modern job portal that connects employers with top talent, offering a streamlined experience for job seekers and recruiters.",
     images: ["https://www.atalenthub.com/images/og.png"], // replace with your real og image
   },
   icons: {
-    icon: "/atalenthub_logo.svg",
+    icon: "/logo.png",
     shortcut: "/atalenthub-logo.png",
-    apple: "/atalenthub-logo.png",
+    apple: "/talenthub-logo.png",
   },
 };
 

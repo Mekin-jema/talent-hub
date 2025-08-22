@@ -51,7 +51,7 @@ export default function LoginPage() {
   const onSubmit = async (data: loginFormType) => {
     try {
       login(data);
-      router.push("/admin");
+      router.push("/profile");
 
       form.reset();
     } catch (error) {
