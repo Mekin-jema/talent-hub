@@ -44,53 +44,10 @@ export function TeamSwitcher({
                 <span className="truncate font-medium">{activeTeam?.name}</span>
                 <span className="truncate text-xs">{activeTeam.plan}</span>
               </div>
-              <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
 
-          <DropdownMenuContent
-            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
-            align="start"
-            side={isMobile ? "bottom" : "right"}
-            sideOffset={4}
-          >
-            <DropdownMenuLabel className="text-muted-foreground text-xs">Branches</DropdownMenuLabel>
-            {teams?.map((team) => (
-              <DropdownMenuItem
-                key={team.name}
-                onClick={() => setActiveTeam(team)}
-                className="gap-2 p-2"
-              >
-                <div className="flex size-6 items-center justify-center rounded-md border">
-                  <team.logo className="size-3.5 shrink-0" />
-                </div>
-                {team.name}
-              </DropdownMenuItem>
-            ))}
-
-            <DropdownMenuSeparator />
-
-            {/* Add Branch Trigger */}
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-              <DialogTrigger asChild>
-                <div className="flex items-center gap-2 p-2 cursor-pointer">
-                  <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
-                    <Plus className="size-4" />
-                  </div>
-                  <div className="text-muted-foreground font-medium">Add new branch</div>
-                </div>
-              </DialogTrigger>
-
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Create a New Branch</DialogTitle>
-                  <DialogClose />
-                  
-                </DialogHeader>
-                {/* <CreateOrganizaionForm /> */}
-              </DialogContent>
-            </Dialog>
-          </DropdownMenuContent>
+     
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>

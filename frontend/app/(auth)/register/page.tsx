@@ -65,13 +65,13 @@ export default function SignupPage() {
   };
 
   return (
-    <section className="flex h-screen bg-zinc-50 px-4 py-10 md:py-10 dark:bg-transparent">
+    <section className="flex h-screen bg-zinc-50 px-4 py-2 dark:bg-transparent">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="bg-card m-auto h-fit w-full max-w-sm rounded-[calc(var(--radius)+.125rem)] border p-0.5 shadow-md dark:[--color-muted:var(--color-zinc-900)]"
         >
-          <div className="p-8 ">
+          <div className="px-8 py-2">
             <div className="flex flex-col items-center ">
               <Link href="/" aria-label="go home">
                 <Image src="/logo.png" alt="Logo" width={100} height={100} />
@@ -141,7 +141,7 @@ export default function SignupPage() {
                 />
               </div>
 
-              <Button type="submit" disabled={isLoading} className="w-full">
+              <Button type="submit" disabled={isLoading} className="w-full dark:text-white">
                 {isLoading ? "Signing up..." : "Sign Up"}
               </Button>
             </div>

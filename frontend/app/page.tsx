@@ -195,7 +195,7 @@ const Hero = ({
     <>
       {/* ======================= Navbar ======================= */}
       <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur border-b supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto flex items-center justify-between py-3 px-4 md:px-0">
+        <div className="container mx-auto flex items-center justify-between py-1 px-4 md:px-0">
           {/* Logo & Mobile Toggle */}
           <div className="flex items-center gap-4">
             <Button

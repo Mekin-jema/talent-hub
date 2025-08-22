@@ -16,11 +16,13 @@ import { GoogleIcon } from "@/components/icons/GoogleIcon";
 import { GithubIcon } from "@/components/icons/GithubIcon";
 import { useAuthStore } from "@/store/useAuthStore";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGithubPending, startGithubTransition] = useTransition();
   const [isGooglePending, startGoogleTransition] = useTransition();
+  const router = useRouter();
 
   // import user store
   const {login} = useAuthStore();
@@ -49,6 +51,8 @@ export default function LoginPage() {
   const onSubmit = async (data: loginFormType) => {
     try {
       login(data);
+      router.push("/admin");
+
       form.reset();
     } catch (error) {
       toast.error("Unexpected error occurred");
@@ -58,13 +62,13 @@ export default function LoginPage() {
   };
 
   return (
-    <section className="flex h-screen bg-zinc-50 px-4 py-8 md:py-10 dark:bg-transparent">
+    <section className="flex h-screen bg-zinc-50 px-4 py-2  dark:bg-transparent">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="bg-card m-auto h-fit w-full max-w-sm rounded-[calc(var(--radius)+.125rem)] border p-0.5 shadow-md dark:[--color-muted:var(--color-zinc-900)]"
         >
-          <div className="p-8 pb-6">
+          <div className="px-8 py-2 pb-6">
             <div className="flex flex-col items-center ">
                <Link href="/" aria-label="go home">
                  <Image src="/logo.png" alt="Logo" width={100} height={100} />
@@ -140,7 +144,7 @@ export default function LoginPage() {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full cursor-pointer"
+                className="w-full cursor-pointer dark:text-white"
               >
                 {isLoading ? "Logging in..." : "Sign In"}
               </Button>
