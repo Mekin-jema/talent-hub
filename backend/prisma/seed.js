@@ -17,7 +17,7 @@ async function main() {
     data: {
       email: 'employer@company.com',
       password: passwordEmployer,
-      name: 'Alice Employer',
+      fullName: 'Alice Employer',
       role: Role.EMPLOYER,
     },
   })
@@ -26,7 +26,7 @@ async function main() {
     data: {
       email: 'dev1@example.com',
       password: passwordDev1,
-      name: 'Bob Developer',
+      fullName: 'Bob Developer',
       role: Role.DEVELOPER,
     },
   })
@@ -35,7 +35,7 @@ async function main() {
     data: {
       email: 'dev2@example.com',
       password: passwordDev2,
-      name: 'Charlie Developer',
+      fullName: 'Charlie Developer',
       role: Role.DEVELOPER,
     },
   })

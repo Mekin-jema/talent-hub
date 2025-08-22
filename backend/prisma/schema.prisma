@@ -1,91 +1,117 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// ============================================================
+// 🌟 Prisma Schema for Talent Hub Job Portal
+// This schema defines the core data models for the application
+// Users can post jobs, apply to jobs, and manage job listings
+// ============================================================
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
+// 🔧 Prisma Client Generator (Auto-generates TypeScript client)
 generator client {
   provider = "prisma-client-js"
 }
 
+// 💾 Database Configuration
 datasource db {
-  provider = "sqlite"
-   url      = "file:./job.db"
+  provider = "sqlite"         // Using SQLite (good for dev/testing)
+  url      = "file:./job.db"  // Database file location
 }
 
-
+// ============================================================
+// 👤 USER MODEL
+// Represents anyone using the platform (Job Seekers or Employers)
+// ============================================================
 model User {
-  id          String   @id @default(cuid())
-  email       String   @unique
-  password    String
-  name        String
-  role        Role     @default(DEVELOPER)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
+  id          String   @id @default(cuid())     // Unique user ID
+  email       String   @unique                  // User email (must be unique)
+  password    String                            // Hashed password
+  fullName    String                            // Full name of the user
+  role        Role     @default(DEVELOPER)      // User role (Dev, Employer, Admin)
+  phone       String?                           // Optional phone number
+  location    String?                           // Optional location
+  linkedIn    String?                           // Optional LinkedIn profile
+  portfolio   String?                           // Optional portfolio/website
+  createdAt   DateTime @default(now())          // When the user was created
+  updatedAt   DateTime @updatedAt               // Auto-updated timestamp
+
   // Relationships
-  jobs        Job[]    @relation("JobPoster")
-  applications Application[]
-  
-  @@map("users")
+  jobs        Job[]          @relation("JobPoster")  // Jobs created by this user
+  applications Application[]                         // Applications submitted
+
+  @@map("users")  // Map to "users" table
 }
 
+// ============================================================
+// 💼 JOB MODEL
+// Represents a job posting created by an employer
+// ============================================================
 model Job {
-  id          String   @id @default(cuid())
-  title       String//
-  type        String?   // refer to Full-time  or Part-Time
-  description String?
-  requirements String?  //???
-  responsibilities String?  //??
-  location      String?
-  aboutCompany    String?
-  logo        String?
-  salary      Float?
-  posted      DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  category    String ?
-  featured    Boolean @default(false)
-  skills      Skills[]  //????
+  id               String   @id @default(cuid())     // Unique job ID
+  title            String                            // Job title
+  type             String?                           // e.g. Full-time, Part-time
+  description      String?                           // Detailed job description
+  requirements     Json?     // ["3+ years React", "TypeScript"] as JSON array
+  responsibilities Json?     // ["Build APIs", "Write tests"] as JSON array
+  location         String?                           // Job location (Remote/Onsite)
+  aboutCompany     String?                           // Info about hiring company
+  logo             String?                           // Company logo URL
+  salary           String?                           // Salary range ("$4000-$6000")
+  posted           DateTime?                         // When job was posted
+  updatedAt        DateTime @updatedAt               // Last updated timestamp
+  category         String?                           // e.g. Engineering, Marketing
+  featured         Boolean @default(false)           // Highlighted job or not
+
   // Relationships
-  createdBy   User     @relation("JobPoster", fields: [userId], references: [id])
-  userId      String
-  applications Application[]
-  
-  @@map("jobs")
+  skills           Skill[]                           // Required skills
+  createdBy        User      @relation("JobPoster", fields: [userId], references: [id])  
+  userId           String                             // Employer who created the job
+  applications     Application[]                      // Applications for this job
+
+  @@map("jobs")  // Map to "jobs" table
 }
 
+// ============================================================
+// 📄 APPLICATION MODEL
+// Represents a job application submitted by a user
+// ============================================================
 model Application {
-  id          String   @id @default(cuid())
-  status      ApplicationStatus @default(APPLIED)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  resumeUrl   String?  // For bonus file upload feature
-  
+  id          String   @id @default(cuid())          // Unique application ID
+  status      ApplicationStatus @default(APPLIED)   // Current status of application
+  createdAt   DateTime @default(now())              // When the application was created
+  updatedAt   DateTime @updatedAt                   // Last updated timestamp
+  resumeUrl   String?                               // Optional resume link/file
+
   // Relationships
-  job         Job      @relation(fields: [jobId], references: [id])
+  job         Job      @relation(fields: [jobId], references: [id])   // Job applied for
   jobId       String
-  applicant   User     @relation(fields: [userId], references: [id])
+  applicant   User     @relation(fields: [userId], references: [id])  // Applicant (User)
   userId      String
-  
-  @@unique([userId, jobId]) // Prevent duplicate applications
-  @@map("applications")
+
+  @@unique([userId, jobId]) // Prevent duplicate applications per job
+  @@map("applications")     // Map to "applications" table
 }
 
+// ============================================================
+// 🛠 SKILL MODEL
+// Represents skills required for a job
+// ============================================================
+model Skill {
+  id     String @id @default(cuid())    // Unique skill ID
+  name   String                         // Skill name (e.g. React, Node.js)
+  jobId  String                         // The job this skill belongs to
+  job    Job @relation(fields: [jobId], references: [id])
+}
+
+// ============================================================
+// 🎭 ENUMS
+// Enums help keep roles and statuses clean and consistent
+// ============================================================
 enum Role {
-  DEVELOPER
-  EMPLOYER
-  ADMIN
+  DEVELOPER   // Default user role (Job Seeker)
+  EMPLOYER    // Can post jobs
+  ADMIN       // Platform admin
 }
 
 enum ApplicationStatus {
-  APPLIED
-  SHORTLISTED
-  REJECTED
-}
-
-model Skills {
-  id String @id @default(uuid())
-  name String
-  jobId String
-  job Job @relation(fields: [jobId], references: [id])
+  APPLIED       // Initial state
+  SHORTLISTED   // Candidate shortlisted
+  REJECTED      // Candidate rejected
 }
