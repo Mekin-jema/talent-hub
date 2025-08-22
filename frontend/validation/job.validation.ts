@@ -2,6 +2,7 @@
 import { z } from "zod";
 
 export const jobFormSchema = z.object({
+  id: z.string().uuid("Invalid job ID").optional(),
   title: z.string().min(1, "Title is required").max(100, "Title too long").optional(),
   type: z.string().optional(),
   description: z.string().min(10, "Description must be at least 10 characters").optional(),

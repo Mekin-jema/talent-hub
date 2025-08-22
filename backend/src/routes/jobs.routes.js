@@ -8,7 +8,9 @@ const router = express.Router();
 
 router.get('/', asyncHandler(jobController.getJobs));
 router.get('/:id', asyncHandler(jobController.getJobById));
-router.post('/', authenticateToken, requireRole(Role.EMPLOYER), asyncHandler(jobController.createJob));
+router.post('/', authenticateToken,
+     requireRole(Role.EMPLOYER), 
+     asyncHandler(jobController.createJob));
 router.put('/:id', authenticateToken, asyncHandler(jobController.updateJob));
 router.delete('/:id', authenticateToken, asyncHandler(jobController.deleteJob));
 

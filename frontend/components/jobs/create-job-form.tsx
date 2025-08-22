@@ -13,11 +13,13 @@ import JobResponsibilities from "./job-responsibilities";
 import JobSkills from "./job-skills";
 import JobFeatured from "./job-featured";
 import { Loader2 } from "lucide-react";
+import { useJobStore } from "@/store/useJobStore";
 
 export default function CreateJobForm() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [skillInput, setSkillInput] = useState("");
+  const { createJob } = useJobStore();
 
   const {
     register,
@@ -97,7 +99,9 @@ export default function CreateJobForm() {
   };
 
   const onSubmit = async (data: JobFormValues) => {
-    console.log("job form data",data)
+
+    // Call the createJob function from the job store
+    createJob(data);
     // setIsSubmitting(true);
     // try {
     //   const response = await fetch("/api/jobs", {

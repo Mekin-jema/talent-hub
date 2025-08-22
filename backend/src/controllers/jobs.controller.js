@@ -47,27 +47,56 @@ exports.getJobById = async (req, res) => {
 
   sendSuccessResponse(res, 'Job retrieved successfully', job);
 };
-
-// Create new job (employer only)
 exports.createJob = async (req, res) => {
-  const { title, description } = req.body;
-
-  if (!title || !description) {
-    return sendErrorResponse(res, 'Title and description are required', 400);
-  }
-
-  const job = await prisma.job.create({
-    data: {
+  try {
+    const {
       title,
+      type,
       description,
-      userId: req.user.id
-    },
-    include: {
-      createdBy: { select: { id: true, name: true, email: true } }
-    }
-  });
+      requirements,
+      responsibilities,
+      location,
+      aboutCompany,
+      logo,
+      salary,
+      category,
+      featured,
+      skills
+    } = req.body;
 
-  sendSuccessResponse(res, 'Job created successfully', job, 201);
+    // Validate required fields
+    if (!title || !description) {
+      return sendErrorResponse(res, 'Title and description are required', 400);
+    }
+
+    // Create the job
+    const job = await prisma.job.create({
+      data: {
+        title,
+        type,
+        description,
+        requirements: Array.isArray(requirements) ? requirements : [],
+        responsibilities: Array.isArray(responsibilities) ? responsibilities : [],
+        location,
+        aboutCompany,
+        logo,
+        salary,
+        category,
+        featured: featured || false,
+        posted: new Date(),
+        userId: req.user?.id, // uncomment when auth is implemented
+      },
+      include: {
+        createdBy: { select: { id: true, fullName: true, email: true } },
+        skills: true,
+      },
+    });
+
+    return sendSuccessResponse(res, 'Job created successfully', job, 201);
+  } catch (error) {
+    console.error('Error creating job:', error.message);
+    return sendErrorResponse(res, 'Failed to create job', 500);
+  }
 };
 
 // Update job (owner or admin only)

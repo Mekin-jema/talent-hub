@@ -33,11 +33,10 @@ interface UserStoreState {
   login: (input: loginFormType) => Promise<User>;
   loginWithProvider: (provider: 'google' | 'github', code: string) => Promise<User>;
   verifyEmail: (token: string) => Promise<User>;
-  checkAuth: () => Promise<void>;
+  checkAuth: () => void;
   logout: () => Promise<void>;
   requestPasswordReset: (email: string) => Promise<{ message: string }>;
   resetPassword: (token: string, newPassword: string, email: string) => Promise<void>;
-  getCurrentUser: () => Promise<User | null>;
   updateProfile: (input: Partial<User>) => Promise<User | null>;
 }
 
@@ -50,41 +49,42 @@ export const useAuthStore = create<UserStoreState>()(
       loading: false,
       error: null,
 
- signup: async (input: SignupFormType) => {
-  try {
-    set({ loading: true });
+      signup: async (input: SignupFormType) => {
+        try {
+          set({ loading: true });
+          const res = await axios.post(`${AUTH_API_URL}/register`, input);
 
-    const response = await axios.post(`${AUTH_API_URL}/register`, input);
-    console.log(response)
+          if (res.data.success === false) {
+            toast.error(res.data.data.message || 'Signup failed');
+            return { message: res.data.data.message };
+          }
 
-    // Check backend "success" field
-    if (response.data.success === false) {
-      toast.error(response.data.data.message || 'Signup failed');
-      return { message: response.data.data.message }; // return message to the component
-    }
-
-    toast.success(response.data.data.message || 'Signup successful');
-    return { message: response.data.data.message || 'Signup successful' };
-  } catch (error) {
-    console.log(error)
-    handleError(error, 'Signup failed');
-    throw error;
-  } finally {
-    set({ loading: false });
-  }
-},
-
+          toast.success(res.data.data.message || 'Signup successful');
+          return { message: res.data.data.message || 'Signup successful' };
+        } catch (err) {
+          handleError(err, 'Signup failed');
+          throw err;
+        } finally {
+          set({ loading: false });
+        }
+      },
 
       login: async (input) => {
         try {
           set({ loading: true });
           const res = await axios.post(`${AUTH_API_URL}/login`, input);
-          const user: User = res.data.data;
-          if (!user?.token) throw new Error(res.data.message || 'Login failed');
-          axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
-          set({ user, isAuthenticated: true });
+          const { token, ...userData } = res.data.data;
+
+          if (!token) throw new Error(res.data.message || 'Login failed');
+
+          // set axios auth header
+          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+          // persist user including token
+          set({ user: { ...userData, token }, isAuthenticated: true });
           toast.success('Login successful');
-          return user;
+
+          return { ...userData, token };
         } catch (err) {
           handleError(err, 'Login failed');
           throw err;
@@ -97,12 +97,14 @@ export const useAuthStore = create<UserStoreState>()(
         try {
           set({ loading: true });
           const res = await axios.post(`${AUTH_API_URL}/auth/${provider}`, { code });
-          const user: User = res.data.data;
-          if (!user?.token) throw new Error('Social login failed');
-          axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
-          set({ user, isAuthenticated: true });
+          const { token, ...userData } = res.data.data;
+
+          if (!token) throw new Error('Social login failed');
+
+          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+          set({ user: { ...userData, token }, isAuthenticated: true });
           toast.success(`${provider} login successful`);
-          return user;
+          return { ...userData, token };
         } catch (err) {
           handleError(err, 'Social login failed');
           throw err;
@@ -126,15 +128,15 @@ export const useAuthStore = create<UserStoreState>()(
         }
       },
 
-      checkAuth: async () => {
-        try {
-          set({ isCheckingAuth: true });
-          await get().getCurrentUser();
-        } catch {
+      checkAuth: () => {
+        const { user } = get();
+        if (user?.token) {
+          axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
+          set({ isAuthenticated: true });
+        } else {
           set({ isAuthenticated: false });
-        } finally {
-          set({ isCheckingAuth: false });
         }
+        set({ isCheckingAuth: false });
       },
 
       logout: async () => {
@@ -177,20 +179,6 @@ export const useAuthStore = create<UserStoreState>()(
         }
       },
 
-      getCurrentUser: async () => {
-        try {
-          const res = await axios.get(`${AUTH_API_URL}/me`);
-          const user: User = res.data.data;
-          if (user?.token) axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
-          set({ user, isAuthenticated: !!user });
-          return user;
-        } catch (err) {
-          set({ user: null, isAuthenticated: false });
-          handleError(err, 'Failed to fetch user');
-          return null;
-        }
-      },
-
       updateProfile: async (input) => {
         try {
           set({ loading: true });
@@ -219,13 +207,5 @@ export const useAuthStore = create<UserStoreState>()(
   )
 );
 
-// Initialize auth if token exists inside user
-const initializeAuth = async () => {
-  const { user } = useAuthStore.getState();
-  if (user?.token) {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
-    await useAuthStore.getState().getCurrentUser();
-  }
-};
-
-initializeAuth();
+// Initialize auth from localStorage
+useAuthStore.getState().checkAuth();

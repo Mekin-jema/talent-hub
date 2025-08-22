@@ -182,7 +182,7 @@ const Hero = ({
   const navLinks = [
     { href: "/jobs", label: "Browse Jobs" },
     { href: "/companies", label: "Companies" },
-    { href: "/career-advice", label: "Career Advice" },
+    { href: "/jobs/create", label: "Post a Job" },
   ];
 
   const handleLogout = () => console.log("Logging out...");

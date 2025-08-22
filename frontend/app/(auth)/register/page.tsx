@@ -25,7 +25,7 @@ export default function SignupPage() {
   const form = useForm<SignupFormType>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
-      name: "",
+      fullName: "",
       email: "",
       password: "",
     },
@@ -113,7 +113,7 @@ export default function SignupPage() {
             <div className="space-y-6">
               <InputField
                 control={form.control}
-                name="name"
+                name="fullName"
                 type="text"
                 label="Full Name"
                 placeholder="Enter your full name"

@@ -4,9 +4,9 @@ const strongPasswordRegex =
   /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/;
 
 const errorMessages = {
-  name: {
-    required: "Name is required",
-    min: "Name must be at least 2 characters long",
+  fullName: {
+    required: "Full Name is required",
+    min: "Full Name must be at least 2 characters long",
   },
   email: {
     required: "Email is required",
@@ -20,10 +20,10 @@ const errorMessages = {
 };
 
 export const signupSchema = z.object({
-  name: z
+  fullName: z
     .string()
-    .min(2, { message: errorMessages.name.min })
-    .nonempty({ message: errorMessages.name.required }),
+    .min(2, { message: errorMessages.fullName.min })
+    .nonempty({ message: errorMessages.fullName.required }),
 
   email: z
     .string()

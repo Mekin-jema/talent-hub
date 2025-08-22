@@ -5,15 +5,18 @@ const { sendSuccessResponse, sendErrorResponse } = require('../utils/apiResponse
 
 // Register new user
 exports.register = async (req, res) => {
-  const { email, password, name, role } = req.body;
+  const { email, password, fullName, role } = req.body;
 
-  if (!email || !password || !name) {
+  if (!email || !password || !fullName) {
     return sendErrorResponse(res, 'Missing required fields', 400);
   }
 
   const existingUser = await prisma.user.findUnique({ where: { email } });
+  // if (existingUser) {
+  //   return sendErrorResponse(res, 'User already exists', 400);
+  // }
   if (existingUser) {
-    return sendErrorResponse(res, 'User already exists', 400);
+    return res.status(409).json({ message: 'User already exists' });
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -22,7 +25,7 @@ exports.register = async (req, res) => {
     data: {
       email,
       password: hashedPassword,
-      name,
+      fullName,
       role: role || 'DEVELOPER'
     }
   });
@@ -79,7 +82,7 @@ exports.logout = async (req, res) => {
 exports.getMe = async (req, res) => {
   const user = await prisma.user.findUnique({
     where: { id: req.user.id },
-    select: { id: true, email: true, name: true, role: true, createdAt: true }
+    select: { id: true, email: true, fullName: true, role: true, createdAt: true }
   });
 
   if (!user) return sendErrorResponse(res, 'User not found', 404);
