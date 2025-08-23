@@ -11,10 +11,10 @@ exports.getJobs = async (req, res) => {
   const [jobs, total] = await Promise.all([
     prisma.job.findMany({
       include: {
-        createdBy: { select: { id: true, name: true, email: true } },
+        createdBy: { select: { id: true, fullName: true, email: true } },
         _count: { select: { applications: true } }
       },
-      orderBy: { createdAt: 'desc' },
+      orderBy: {   posted: 'desc' },
       skip,
       take: limit
     }),

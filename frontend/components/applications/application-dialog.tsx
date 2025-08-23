@@ -64,6 +64,7 @@ export function ApplicationDialog({
     setIsSubmitting(true);
     setApplicationStep(2);
     
+    
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1500));
     console.log("Application submitted:", { job, data, resume });

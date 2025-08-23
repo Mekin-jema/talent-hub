@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -10,105 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Building2, MapPin, DollarSign, Clock, Search, Bookmark, BookmarkCheck, Filter, X, ChevronDown, ChevronUp } from "lucide-react";
-
-// Mock all jobs
-const allJobs = [
-  {
-    id: "job_1",
-    title: "Frontend Developer",
-    company: "TechCorp",
-    logo: "https://logo.clearbit.com/reactjs.org",
-    location: "Remote",
-    salary: "$4000 - $6000",
-    type: "Full-time",
-    posted: "2 days ago",
-    skills: ["React", "TypeScript", "Tailwind"],
-    featured: true,
-    category: "Engineering",
-    description: "We're looking for a talented Frontend Developer to join our team. You'll be responsible for building user interfaces and implementing designs.",
-    requirements: ["3+ years of React experience", "Strong TypeScript skills", "Experience with responsive design"]
-  },
-  {
-    id: "job_2",
-    title: "Backend Developer",
-    company: "SoftNet",
-    logo: "https://logo.clearbit.com/nodejs.org",
-    location: "Addis Ababa",
-    salary: "$3500 - $5000",
-    type: "Full-time",
-    posted: "5 days ago",
-    skills: ["Node.js", "Express", "MongoDB", "Docker"],
-    featured: false,
-    category: "Engineering",
-    description: "Join our backend team to build scalable APIs and services for our growing user base.",
-    requirements: ["Experience with Node.js and Express", "Database design skills", "Knowledge of containerization"]
-  },
-  {
-    id: "job_3",
-    title: "Fullstack Developer",
-    company: "InnoTech",
-    logo: "https://logo.clearbit.com/github.com",
-    location: "Hybrid",
-    salary: "$4500 - $7000",
-    type: "Contract",
-    posted: "1 week ago",
-    skills: ["React", "Node.js", "GraphQL"],
-    featured: true,
-    category: "Engineering",
-    description: "We need a fullstack developer to help us build end-to-end features for our platform.",
-    requirements: ["Experience with both frontend and backend", "GraphQL knowledge", "Problem-solving skills"]
-  },
-  {
-    id: "job_4",
-    title: "Data Scientist",
-    company: "DataWiz",
-    logo: "https://logo.clearbit.com/python.org",
-    location: "Remote",
-    salary: "$5000 - $7500",
-    type: "Full-time",
-    posted: "3 days ago",
-    skills: ["Python", "Machine Learning", "TensorFlow", "SQL"],
-    featured: false,
-    category: "Data Science",
-    description: "Join our data team to extract insights from large datasets and build predictive models.",
-    requirements: ["Advanced degree in a quantitative field", "Experience with ML frameworks", "SQL proficiency"]
-  },
-  {
-    id: "job_5",
-    title: "UI/UX Designer",
-    company: "DesignPro",
-    logo: "https://logo.clearbit.com/figma.com",
-    location: "Addis Ababa",
-    salary: "$3000 - $4500",
-    type: "Full-time",
-    posted: "1 week ago",
-    skills: ["Figma", "Adobe XD", "Prototyping"],
-    featured: false,
-    category: "Design",
-    description: "We're looking for a creative UI/UX designer to create beautiful and intuitive interfaces.",
-    requirements: ["Portfolio demonstrating UI/UX skills", "Proficiency in design tools", "Understanding of user research"]
-  },
-  {
-    id: "job_6",
-    title: "Full-Stack React Native web app developer",
-    company: "Private Client",
-    logo: "https://logo.clearbit.com/reactjs.org",
-    location: "Addis Ababa, Ethiopia",
-    salary: "$5000 - $8000",
-    type: "Contractual",
-    posted: "1 day ago",
-    skills: ["React Native", "Firebase", "Node.js", "Web Development"],
-    featured: true,
-    category: "Engineering",
-    description: "We're looking for a talented full-stack React Native developer to build a web app football fan engagement app with live scores, real-time chat, and quizzes.",
-    requirements: ["3+ years React Native experience", "Backend development skills", "Experience with real-time applications"]
-  }
-];
-
-// Extract unique categories, locations, and job types for filters
-const categories = [...new Set(allJobs.map(job => job.category))];
-const locations = [...new Set(allJobs.map(job => job.location))];
-const jobTypes = [...new Set(allJobs.map(job => job.type))];
+import { useJobStore } from "@/store/useJobStore";
 
 export default function AllJobsPage() {
   const router = useRouter();
@@ -127,13 +29,22 @@ export default function AllJobsPage() {
     experience: true,
   });
 
-  const handleApply = (jobId: string) => {
+  const { fetchJobs, jobs, loading, error } = useJobStore();
 
+  useEffect(() => {
+    fetchJobs();
+  }, [fetchJobs]);
+
+  // Extract unique categories, locations, and job types for filters from actual data
+  const categories = [...new Set(jobs.map(job => job.category))];
+  const locations = [...new Set(jobs.map(job => job.location))];
+  const jobTypes = [...new Set(jobs.map(job => job.type))];
+
+  const handleApply = (jobId: string) => {
     if (appliedJobs.includes(jobId)) {
       alert("You already applied for this job!");
       return;
     }
-
     router.push(`/jobs/${jobId}`);
   };
 
@@ -169,21 +80,22 @@ export default function AllJobsPage() {
   };
 
   // Filter jobs by search term and filters
-  const filteredJobs = allJobs.filter((job) => {
+  const filteredJobs = jobs.filter((job) => {
     const matchesSearch = 
       job.title.toLowerCase().includes(search.toLowerCase()) ||
-      job.company.toLowerCase().includes(search.toLowerCase()) ||
-      job.skills.some(skill => 
-        skill.toLowerCase().includes(search.toLowerCase())
+      (job.company && job.company.toLowerCase().includes(search.toLowerCase())) ||
+      job.skills?.some(skill => 
+        typeof skill === 'string' ? skill.toLowerCase().includes(search.toLowerCase()) :
+        skill.name.toLowerCase().includes(search.toLowerCase())
       );
 
     const matchesCategory = filters.category ? job.category === filters.category : true;
     const matchesLocation = filters.location ? job.location === filters.location : true;
     const matchesType = filters.type ? job.type === filters.type : true;
     const matchesRemote = filters.remote ? 
-      (filters.remote === "remote" ? job.location === "Remote" : 
-       filters.remote === "onsite" ? job.location !== "Remote" && job.location !== "Hybrid" :
-       filters.remote === "hybrid" ? job.location === "Hybrid" : true) : true;
+      (filters.remote === "remote" ? job.location?.toLowerCase().includes("remote") : 
+       filters.remote === "onsite" ? !job.location?.toLowerCase().includes("remote") && !job.location?.toLowerCase().includes("hybrid") :
+       filters.remote === "hybrid" ? job.location?.toLowerCase().includes("hybrid") : true) : true;
 
     return matchesSearch && matchesCategory && matchesLocation && matchesType && matchesRemote;
   });
@@ -193,6 +105,37 @@ export default function AllJobsPage() {
   const viewJobDetails = (jobId: string) => {
     router.push(`/jobs/${jobId}`);
   };
+
+  // Format date function
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now.getTime() - date.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 1) return "1 day ago";
+    if (diffDays < 7) return `${diffDays} days ago`;
+    if (diffDays < 30) return `${Math.ceil(diffDays / 7)} weeks ago`;
+    return `${Math.ceil(diffDays / 30)} months ago`;
+  };
+
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto p-8 text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+        <p>Loading jobs...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-7xl mx-auto p-8 text-center">
+        <div className="text-destructive mb-4">Error: {error}</div>
+        <Button onClick={() => fetchJobs()}>Try Again</Button>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto bg-background text-foreground min-h-screen">
@@ -296,21 +239,33 @@ export default function AllJobsPage() {
             )}
           </div>
 
-          {/* Experience Level Filter */}
+          {/* Location Filter */}
           <div className="border rounded-lg p-4">
             <div 
               className="flex justify-between items-center cursor-pointer"
-              onClick={() => toggleFilterSection('experience')}
+              onClick={() => toggleFilterSection('location')}
             >
-              <h4 className="font-medium">Experience Level</h4>
+              <h4 className="font-medium">Location</h4>
               {expandedFilters.experience ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
             </div>
             {expandedFilters.experience && (
               <div className="mt-3 space-y-2">
-                {["Entry Level", "Mid Level", "Senior", "Executive"].map((level) => (
-                  <div key={level} className="flex items-center space-x-2">
-                    <Checkbox id={`level-${level}`} />
-                    <Label htmlFor={`level-${level}`} className="text-sm">{level}</Label>
+                <div className="flex items-center space-x-2">
+                  <Checkbox 
+                    id="location-all" 
+                    checked={filters.location === ""}
+                    onCheckedChange={() => handleFilterChange("location", "")}
+                  />
+                  <Label htmlFor="location-all" className="text-sm">All locations</Label>
+                </div>
+                {locations.map((location) => (
+                  <div key={location} className="flex items-center space-x-2">
+                    <Checkbox 
+                      id={`location-${location}`} 
+                      checked={filters.location === location}
+                      onCheckedChange={() => handleFilterChange("location", location)}
+                    />
+                    <Label htmlFor={`location-${location}`} className="text-sm">{location}</Label>
                   </div>
                 ))}
               </div>
@@ -346,6 +301,8 @@ export default function AllJobsPage() {
               {filteredJobs.map((job) => {
                 const applied = appliedJobs.includes(job.id);
                 const saved = savedJobs.includes(job.id);
+                const companyName = job.createdBy?.fullName || job.company || "Private Company";
+                const logo = job.logo || "/placeholder-company.png";
 
                 return (
                   <Card 
@@ -357,15 +314,18 @@ export default function AllJobsPage() {
                       <div className="flex justify-between items-start">
                         <div className="flex items-center space-x-3">
                           <img
-                            src={job.logo}
-                            alt={job.company}
+                            src={logo}
+                            alt={companyName}
                             className="w-12 h-12 rounded-lg object-cover border"
+                            onError={(e) => {
+                              e.currentTarget.src = "/placeholder-company.png";
+                            }}
                           />
                           <div>
                             <h3 className="font-semibold text-lg">{job.title}</h3>
                             <p className="text-muted-foreground flex items-center text-sm">
                               <Building2 className="w-4 h-4 mr-1" />
-                              {job.company}
+                              {companyName}
                             </p>
                           </div>
                         </div>
@@ -406,20 +366,34 @@ export default function AllJobsPage() {
                           </Badge>
                         )}
                       </div>
+                      {job.skills && job.skills.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mt-2">
+                          {job.skills.slice(0, 3).map((skill, index) => (
+                            <Badge key={index} variant="secondary" className="text-xs">
+                              {typeof skill === 'string' ? skill : skill.name}
+                            </Badge>
+                          ))}
+                          {job.skills.length > 3 && (
+                            <Badge variant="outline" className="text-xs">
+                              +{job.skills.length - 3} more
+                            </Badge>
+                          )}
+                        </div>
+                      )}
                     </CardContent>
 
                     <CardFooter className="flex justify-between items-center pt-3 border-t">
                       <div className="flex items-center text-sm text-muted-foreground">
                         <DollarSign className="w-4 h-4 mr-1" />
-                        {job.salary}
+                        {job.salary ? `$${job.salary}` : 'Salary not specified'}
                         <span className="mx-2">•</span>
                         <Clock className="w-4 h-4 mr-1" />
-                        Posted {job.posted}
+                        {job.posted ? `Posted ${formatDate(job.posted)}` : 'Recently posted'}
                       </div>
                       <Button
                         size="sm"
-                        onClick={() => {
-                         
+                        onClick={(e) => {
+                          e.stopPropagation();
                           handleApply(job.id);
                         }}
                         disabled={applied}
