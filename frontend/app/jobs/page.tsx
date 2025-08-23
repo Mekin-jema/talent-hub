@@ -11,10 +11,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Building2, MapPin, DollarSign, Clock, Search, Bookmark, BookmarkCheck, Filter, X, ChevronDown, ChevronUp, Users } from "lucide-react";
 import { useJobStore } from "@/store/useJobStore";
+import { useApplicationStore } from "@/store/useApplicationStore";
 
 export default function AllJobsPage() {
   const router = useRouter();
-  const [appliedJobs, setAppliedJobs] = useState<string[]>([]);
   const [savedJobs, setSavedJobs] = useState<string[]>([]);
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState({
@@ -30,15 +30,13 @@ export default function AllJobsPage() {
   });
 
   const { fetchJobs, jobs, loading, error } = useJobStore();
-
-
+  const { checkIfApplied } = useApplicationStore();
 
   useEffect(() => {
     fetchJobs();
   }, [fetchJobs]);
 
 
-  console.log("Jobs in AllJobsPage:", jobs);
 
   // Extract unique categories, locations, and job types for filters from actual data
   const categories = [...new Set(jobs.map(job => job.category).filter((v): v is string => typeof v === "string" && v.trim() !== ""))];
@@ -46,8 +44,13 @@ export default function AllJobsPage() {
   const jobTypes = [...new Set(jobs.map(job => job.type).filter((v): v is string => typeof v === "string" && v.trim() !== ""))];
 
   const handleApply = (jobId?: string) => {
+    console.log("jobId", jobId);
+    if(jobId){
+
+      console.log("check the chekcIfApplied ",checkIfApplied(jobId));
+    }
     if (!jobId) return;
-    if (appliedJobs.includes(jobId)) {
+    if (checkIfApplied(jobId)) {
       alert("You already applied for this job!");
       return;
     }
@@ -310,7 +313,6 @@ export default function AllJobsPage() {
             <div className="space-y-4">
               {filteredJobs.map((job) => {
                 if (!job.id) return null; // Skip jobs without an id to satisfy type narrowing
-                const applied = appliedJobs.includes(job.id);
                 const saved = savedJobs.includes(job.id);
                 // const companyName = job.posted?.fullName || job.company || "Private Company";
                 const companyName = "Private Company";
@@ -427,9 +429,9 @@ export default function AllJobsPage() {
                           e.stopPropagation();
                           handleApply(job.id);
                         }}
-                        disabled={applied}
+                        disabled={checkIfApplied(job.id)}
                       >
-                        {applied ? "Applied" : "Apply Now"}
+                     {checkIfApplied(job.id) ? "Already Applied" : "Apply"}
                       </Button>
                     </CardFooter>
 

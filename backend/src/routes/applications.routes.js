@@ -6,7 +6,7 @@ const applicationController = require('../controllers/applications.controller');
 
 const router = express.Router();
 
-router.post('/', authenticateToken, 
+router.post('/apply', authenticateToken, 
     // requireRole(Role.DEVELOPER), 
     asyncHandler(applicationController.applyForJob));
 router.get('/', authenticateToken, requireRole(Role.ADMIN), asyncHandler(applicationController.getAllApplications));

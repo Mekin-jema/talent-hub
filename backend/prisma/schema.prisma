@@ -77,7 +77,10 @@ model Application {
   status      ApplicationStatus @default(APPLIED)   // Current status of application
   createdAt   DateTime @default(now())              // When the application was created
   updatedAt   DateTime @updatedAt                   // Last updated timestamp
-  resumeUrl   String?                               // Optional resume link/file
+  resumeUrl   String?  @default("") 
+  coverLetter String?    @default("")                            // Optional cover letter
+  salaryExpectation String?  @default("")                     // Optional salary expectation
+  noticePeriod String?  @default("")                          // Optional notice period
 
   // Relationships
   job         Job      @relation(fields: [jobId], references: [id])   // Job applied for

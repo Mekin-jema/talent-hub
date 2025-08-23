@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2, CheckCircle, Upload } from "lucide-react";
 import { applicationFormSchema, ApplicationFormValues } from "@/validation/application.validation";
+import { useApplicationStore } from "@/store/useApplicationStore";
 
 
 interface ApplicationDialogProps {
@@ -37,6 +38,8 @@ export function ApplicationDialog({
   onApplicationSubmit
 }: ApplicationDialogProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const {applyForJob}=useApplicationStore()
   
   const {
     register,
@@ -61,13 +64,14 @@ export function ApplicationDialog({
   });
 
   const onSubmit = async (data: ApplicationFormValues) => {
+    applyForJob(data,job.id)
+
     setIsSubmitting(true);
     setApplicationStep(2);
     
     
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1500));
-    console.log("Application submitted:", { job, data, resume });
     
     setIsSubmitting(false);
     setApplicationStep(3);

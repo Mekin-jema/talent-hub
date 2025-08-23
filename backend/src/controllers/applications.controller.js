@@ -5,52 +5,58 @@ const { ApplicationStatus, Role } = require('@prisma/client');
 
 // Apply for a job (developer only)
 exports.applyForJob = async (req, res) => {
-  const { jobId, coverLetter, salaryExpectation, noticePeriod, resumeUrl } = req.body;
+  console.log(req.body);
 
-  if (!jobId) {
-    return sendErrorResponse(res, 'Job ID is required', 400);
+  const {
+    id, // jobId
+    data: { coverLetter, salaryExpectation, noticePeriod, resumeUrl },
+  } = req.body;
+
+  if (!id) {
+    return sendErrorResponse(res, "Job ID is required", 400);
   }
 
-  const job = await prisma.job.findUnique({ where: { id: jobId } });
-  if (!job) return sendErrorResponse(res, 'Job not found', 404);
+  const job = await prisma.job.findUnique({ where: { id } });
+  if (!job) return sendErrorResponse(res, "Job not found", 404);
 
   // Prevent duplicate applications
   const existingApplication = await prisma.application.findUnique({
     where: {
       userId_jobId: {
         userId: req.user.id,
-        jobId
-      }
-    }
+        jobId: id,
+      },
+    },
   });
   if (existingApplication) {
-    return sendErrorResponse(res, 'Already applied to this job', 400);
+    return sendErrorResponse(res, "Already applied to this job", 400);
   }
 
-  // Create application with extended fields
+  // ✅ Create application with correct jobId
   const application = await prisma.application.create({
     data: {
-      jobId,
       userId: req.user.id,
+      jobId: id, // <-- this is the fix
       resumeUrl: resumeUrl || null,
-      // Store extra metadata as JSON (extend your schema if you want separate cols)
-      extraData: {
-        coverLetter: coverLetter || null,
-        salaryExpectation: salaryExpectation || null,
-        noticePeriod: noticePeriod || null
-      }
+      coverLetter: coverLetter || null,
+      salaryExpectation: salaryExpectation || null,
+      noticePeriod: noticePeriod || null,
     },
     include: {
-      job: { include: { createdBy: { select: { id: true, fullName: true, email: true } } } },
-      applicant: { select: { id: true, fullName: true, email: true } }
-    }
+      job: {
+        include: {
+          createdBy: { select: { id: true, fullName: true, email: true } },
+        },
+      },
+      applicant: { select: { id: true, fullName: true, email: true } },
+    },
   });
 
   // Notify employer via socket
-  const io = req.app.get('socketio');
-  if (io) io.to(`employer-${job.userId}`).emit('new-application', application);
+  const io = req.app.get("socketio");
+  if (io) io.to(`employer-${job.userId}`).emit("new-application", application);
 
-  sendSuccessResponse(res, 'Application submitted successfully', application, 201);
+  sendSuccessResponse(res, "Application submitted successfully", application, 201);
 };
 
 // Get all applications (admin only)
@@ -99,8 +105,8 @@ exports.getUserApplications = async (req, res) => {
 
 // Get applications for a job
 exports.getJobApplications = async (req, res) => {
-  const jobId = req.params.jobId;
-  const job = await prisma.job.findUnique({ where: { id: jobId } });
+  const id = req.params.id;
+  const job = await prisma.job.findUnique({ where: { id: id } });
 
   if (!job) return sendErrorResponse(res, 'Job not found', 404);
   if (req.user.role !== Role.ADMIN && job.userId !== req.user.id) {
@@ -108,7 +114,7 @@ exports.getJobApplications = async (req, res) => {
   }
 
   const applications = await prisma.application.findMany({
-    where: { jobId },
+    where: { id },
     include: { applicant: { select: { id: true, name: true, email: true } } },
     orderBy: { createdAt: 'desc' }
   });
