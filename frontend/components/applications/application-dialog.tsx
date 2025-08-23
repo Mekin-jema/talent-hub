@@ -10,22 +10,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2, CheckCircle, Upload } from "lucide-react";
+import { applicationFormSchema, ApplicationFormValues } from "@/validation/application.validation";
 
-// Define the application form schema with Zod
-const applicationFormSchema = z.object({
-  fullName: z.string().min(2, "Full name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
-  phone: z.string().min(10, "Phone number must be at least 10 digits"),
-  location: z.string().min(2, "Please enter your location"),
-  linkedIn: z.string().url("Please enter a valid URL").optional().or(z.literal("")),
-  portfolio: z.string().url("Please enter a valid URL").optional().or(z.literal("")),
-  coverLetter: z.string().min(10, "Cover letter must be at least 10 characters"),
-  salaryExpectation: z.string().min(1, "Please enter your salary expectation"),
-  noticePeriod: z.string().min(1, "Please select your notice period"),
-  source: z.string().min(1, "Please let us know how you heard about us")
-});
-
-type ApplicationFormValues = z.infer<typeof applicationFormSchema>;
 
 interface ApplicationDialogProps {
   open: boolean;
@@ -69,7 +55,7 @@ export function ApplicationDialog({
       portfolio: "",
       coverLetter: "",
       salaryExpectation: "",
-      noticePeriod: "",
+      noticePeriod: "immediately",
       source: ""
     }
   });
