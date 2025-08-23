@@ -61,7 +61,7 @@ exports.createJob = async (req, res) => {
       salary,
       category,
       featured,
-      skills
+      skills = []
     } = req.body;
 
     // Validate required fields
@@ -69,7 +69,7 @@ exports.createJob = async (req, res) => {
       return sendErrorResponse(res, 'Title and description are required', 400);
     }
 
-    // Create the job
+    // ✅ Create the job and insert skills
     const job = await prisma.job.create({
       data: {
         title,
@@ -84,7 +84,14 @@ exports.createJob = async (req, res) => {
         category,
         featured: featured || false,
         posted: new Date(),
-        userId: req.user?.id, // uncomment when auth is implemented
+        userId: req.user?.id, // when auth is ready
+
+        // 👇 Insert skills directly tied to this job
+        skills: {
+          create: skills.map((skill) => ({
+            name: skill
+          }))
+        }
       },
       include: {
         createdBy: { select: { id: true, fullName: true, email: true } },
@@ -98,6 +105,7 @@ exports.createJob = async (req, res) => {
     return sendErrorResponse(res, 'Failed to create job', 500);
   }
 };
+
 
 // Update job (owner or admin only)
 exports.updateJob = async (req, res) => {

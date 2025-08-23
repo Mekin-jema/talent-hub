@@ -4,7 +4,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
 const { PrismaClient } = require('@prisma/client');
-const routes = require('./routes');
+const routes = require('./routes/index.route');
 
 const { errorHandler } = require('./middleware/errorHandler');
 const { notFound } = require('./middleware/notFound');
