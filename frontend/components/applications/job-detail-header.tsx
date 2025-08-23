@@ -1,8 +1,8 @@
-// components/jobs/JobDetailHeader.tsx
-import { Building2, MapPin, DollarSign, Clock, CheckCircle, Bookmark, BookmarkCheck, Share } from "lucide-react";
+import { Building2, MapPin, DollarSign, Clock, CheckCircle, Bookmark, BookmarkCheck, Share, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
+import { formatDistanceToNow } from "date-fns";
 
 interface JobDetailHeaderProps {
   job: any;
@@ -12,16 +12,15 @@ interface JobDetailHeaderProps {
   onBack: () => void;
 }
 
-export function JobDetailHeader({ job, saved, onSave, onShare, onBack }: JobDetailHeaderProps) {
-  console.log("Job",job)
+export function JobDetailHeader({ job, saved, onSave, onShare }: JobDetailHeaderProps) {
   return (
     <div className="bg-card rounded-lg p-6 mb-6 shadow-sm border">
+      {/* Top Section */}
       <div className="flex flex-col md:flex-row md:items-start justify-between mb-6">
         <div className="flex items-start space-x-4">
-          <Image
-            src={job?.logo ||"./sample-logo.png"}
+          <img
+            src={job?.logo || "/sample-logo.png"}
             alt={job.aboutCompany}
-            width={100} height={100}
             className="w-16 h-16 rounded-lg object-cover border"
           />
           <div>
@@ -36,13 +35,12 @@ export function JobDetailHeader({ job, saved, onSave, onShare, onBack }: JobDeta
                 {job.location}
               </Badge>
               <Badge variant="outline">{job.type}</Badge>
-              {job.featured && (
-                <Badge variant="default">Featured</Badge>
-              )}
+              {job.featured && <Badge variant="default">Featured</Badge>}
             </div>
           </div>
         </div>
 
+        {/* Actions */}
         <div className="flex space-x-2 mt-4 md:mt-0">
           <Button variant="outline" size="icon" onClick={onSave}>
             {saved ? (
@@ -57,6 +55,7 @@ export function JobDetailHeader({ job, saved, onSave, onShare, onBack }: JobDeta
         </div>
       </div>
 
+      {/* Job Info */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t">
         <div className="flex items-center">
           <DollarSign className="w-5 h-5 mr-2 text-muted-foreground" />
@@ -65,13 +64,19 @@ export function JobDetailHeader({ job, saved, onSave, onShare, onBack }: JobDeta
             <p className="font-medium">{job.salary}</p>
           </div>
         </div>
+
         <div className="flex items-center">
           <Clock className="w-5 h-5 mr-2 text-muted-foreground" />
           <div>
             <p className="text-sm text-muted-foreground">Posted</p>
-            <p className="font-medium">{job.posted}</p>
+            <p className="font-medium">
+              {job.posted
+                ? formatDistanceToNow(new Date(job.posted), { addSuffix: true })
+                : "N/A"}
+            </p>
           </div>
         </div>
+
         <div className="flex items-center">
           <CheckCircle className="w-5 h-5 mr-2 text-muted-foreground" />
           <div>
@@ -79,6 +84,15 @@ export function JobDetailHeader({ job, saved, onSave, onShare, onBack }: JobDeta
             <p className="font-medium">{job.category}</p>
           </div>
         </div>
+      </div>
+
+      {/* Applications Info */}
+      <div className="mt-4 pt-4 border-t flex items-center text-sm text-muted-foreground">
+        <Users className="w-4 h-4 mr-2" />
+        <p>
+          <span className="font-medium text-foreground">{job._count.applications}</span>{" "}
+          {job._count.applications === 1 ? "person has" : "people have"} applied for this job
+        </p>
       </div>
     </div>
   );

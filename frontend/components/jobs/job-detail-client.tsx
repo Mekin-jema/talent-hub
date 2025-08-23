@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader } from "lucide-react";
 import {
   ApplicationDialog,
   JobDetailContent,
@@ -28,25 +28,14 @@ export default function JobDetailClient({ id }: { id: string }) {
   }, [id, getJobById]);
 
   // Show loading state
-  if (loading) {
+  if (loading && !currentJob) {
     return (
       <div className="max-w-4xl mx-auto p-8 text-center">
-        <h1 className="text-2xl font-bold mb-4">Loading...</h1>
+        <Loader className="h-8 w-8 mx-auto animate-spin text-muted-foreground" />
       </div>
     );
   }
 
-  // Handle job not found
-  if (!currentJob) {
-    return (
-      <div className="max-w-4xl mx-auto p-8 text-center">
-        <h1 className="text-2xl font-bold mb-4">Job Not Found</h1>
-        <Button onClick={() => router.back()}>
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Jobs
-        </Button>
-      </div>
-    );
-  }
 
   const handleSave = () => setSaved(!saved);
   const handleApply = () => {
