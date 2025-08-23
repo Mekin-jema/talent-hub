@@ -42,6 +42,8 @@ import {
 import { cn } from "@/lib/utils";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import Image from "next/image";
+import GridDistortion from "@/components/animations/grid-distortion";
+import Squares from "@/components/animations/square";
 
 // =======================
 // Interfaces
@@ -299,8 +301,20 @@ const Hero = ({
         )}
       </header>
 
+     <div className="pointer-events-none absolute inset-0 -z-30">
+        {/* <div className="absolute inset-0 opacity-25 dark:opacity-15">
+          <GridDistortion
+            imageSrc="/diverse-customer-group.png"
+            grid={12}
+            mouse={0.1}
+            strength={0.12}
+            relaxation={0.92}
+          />
+        </div> */}
+        <Squares />
+      </div>
       {/* ======================= Hero Section ======================= */}
-      <section className="w-full bg-gradient-to-b from-background to-muted/30">
+      <section className="w-full bg-transparent">
         <div className="container mx-auto px-4 py-12 md:py-20">
           <div className="grid items-center gap-12 lg:grid-cols-2 mb-16">
             {/* Text Content */}
@@ -310,10 +324,10 @@ const Hero = ({
                   {badge} <ArrowUpRight className="ml-1 md:ml-2 size-3 md:size-4" />
                 </Badge>
               )}
-              <h1 className="my-4 md:my-6 text-3xl md:text-4xl lg:text-6xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+              <h1 className="my-4 md:my-6 text-3xl md:text-4xl lg:text-6xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text dark:text-white">
                 {heading}
               </h1>
-              <p className="text-muted-foreground mb-6 md:mb-8 max-w-xl text-base md:text-lg lg:text-xl">
+              <p className=" mb-6 md:mb-8 max-w-xl text-base md:text-lg lg:text-xl">
                 {description}
               </p>
 

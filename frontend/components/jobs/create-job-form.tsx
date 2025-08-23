@@ -26,6 +26,7 @@ export default function CreateJobForm() {
     handleSubmit,
     setValue,
     watch,
+    reset,
     formState: { errors },
   } = useForm<JobFormValues>({
     resolver: zodResolver(jobFormSchema),
@@ -102,6 +103,8 @@ export default function CreateJobForm() {
 
     // Call the createJob function from the job store
     createJob(data);
+    reset()
+    
     // setIsSubmitting(true);
     // try {
     //   const response = await fetch("/api/jobs", {
