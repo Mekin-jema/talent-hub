@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Loader2, CheckCircle, Upload } from "lucide-react";
 import { applicationFormSchema, ApplicationFormValues } from "@/validation/application.validation";
 import { useApplicationStore } from "@/store/useApplicationStore";
+import { Job } from "@/types";
 
 
 interface ApplicationDialogProps {
@@ -19,7 +19,7 @@ interface ApplicationDialogProps {
   setOpen: (open: boolean) => void;
   applicationStep: number;
   setApplicationStep: (step: number) => void;
-  job: any;
+  job: Job;
   resume: File | null;
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleCloseForm: () => void;
@@ -91,7 +91,7 @@ export function ApplicationDialog({
             <DialogHeader>
               <DialogTitle>Apply for {job.title}</DialogTitle>
               <DialogDescription>
-                Complete the following form to apply for this position at {job.company}.
+                Complete the following form to apply for this position at {job.aboutCompany}.
               </DialogDescription>
             </DialogHeader>
             
@@ -295,8 +295,8 @@ export function ApplicationDialog({
             </div>
             <DialogTitle className="mb-2">Application Submitted!</DialogTitle>
             <DialogDescription className="mb-4">
-              Thank you for applying to the {job.title} position at {job.company}. 
-              We'll review your application and get back to you soon.
+              Thank you for applying to the {job.title} position at {job.aboutCompany}. 
+              We&apos;ll review your application and get back to you soon.
             </DialogDescription>
             <Button onClick={handleClose}>
               Done

@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { jobFormSchema, JobFormValues } from "@/validation/job.validation";
 import JobBasicInfo from "./job-bas-Info";
@@ -12,19 +11,16 @@ import JobRequirements from "./job-requirements";
 import JobResponsibilities from "./job-responsibilities";
 import JobSkills from "./job-skills";
 import JobFeatured from "./job-featured";
-import { Loader2 } from "lucide-react";
 import { useJobStore } from "@/store/useJobStore";
 
 export default function CreateJobForm() {
-  const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [skillInput, setSkillInput] = useState("");
   const { createJob } = useJobStore();
 
   const {
     register,
-    handleSubmit,
     setValue,
+    handleSubmit,
     watch,
     reset,
     formState: { errors },
@@ -103,31 +99,7 @@ export default function CreateJobForm() {
 
     // Call the createJob function from the job store
     createJob(data);
-    reset()
-    
-    // setIsSubmitting(true);
-    // try {
-    //   const response = await fetch("/api/jobs", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(data),
-    //   });
-
-    //   if (response.ok) {
-    //     router.push("/jobs");
-    //     router.refresh();
-    //   } else {
-    //     const error = await response.json();
-    //     alert(error.error || "Failed to create job");
-    //   }
-    // } catch (error) {
-    //   console.error("Error creating job:", error);
-    //   alert("Failed to create job");
-    // } finally {
-    //   setIsSubmitting(false);
-    // }
+    reset();
   };
 
   return (
@@ -177,15 +149,8 @@ export default function CreateJobForm() {
         setValue={setValue}
       />
 
-      <Button type="submit" disabled={isSubmitting} className="w-full">
-        {isSubmitting ? (
-          <>
-            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-            Creating Job...
-          </>
-        ) : (
-          "Create Job Posting"
-        )}
+      <Button type="submit" className="w-full">
+        Create Job Posting
       </Button>
     </form>
   );

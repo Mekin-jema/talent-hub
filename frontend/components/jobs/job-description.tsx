@@ -1,10 +1,13 @@
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { JobFormValues } from "@/validation/job.validation";
+import { FieldErrors, UseFormRegister } from "react-hook-form";
 
 interface JobDescriptionProps {
-  register: any;
-  errors: any;
+  register: UseFormRegister<JobFormValues>;
+  errors: FieldErrors<JobFormValues>;
 }
+
 
 export default function JobDescription({ register, errors }: JobDescriptionProps) {
   return (

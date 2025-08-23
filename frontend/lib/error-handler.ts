@@ -4,11 +4,11 @@ import { toast } from 'sonner';
 interface ApiErrorResponse {
   success?: boolean;
   message?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 // Type guard for Axios errors
-export function isAxiosError<T = any>(error: unknown): error is AxiosError<T> {
+export function isAxiosError<T = unknown>(error: unknown): error is AxiosError<T> {
   return (error as AxiosError).isAxiosError !== undefined;
 }
 

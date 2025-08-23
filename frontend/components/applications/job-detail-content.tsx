@@ -1,8 +1,9 @@
 // components/jobs/JobDetailContent.tsx
 import { Badge } from "@/components/ui/badge";
+import { Job } from "@/types";
 
 interface JobDetailContentProps {
-  job: any;
+  job: Job;
 }
 
 export function JobDetailContent({ job }: JobDetailContentProps) {
@@ -45,8 +46,8 @@ export function JobDetailContent({ job }: JobDetailContentProps) {
       <div className="bg-card rounded-lg p-6 shadow-sm border">
         <h2 className="text-xl font-semibold mb-4">Skills Required</h2>
         <div className="flex flex-wrap gap-2">
-          {job.skills.map((skill: { id: string; name: string }) => (
-            <Badge key={skill.id} variant="secondary" className="text-sm">
+          {job.skills.map((skill) => (
+            <Badge key={String(skill.id)} variant="secondary" className="text-sm">
               {skill.name}
             </Badge>
           ))}

@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/command";
 import { ScrollArea } from "../ui/scroll-area";
 import { useSearch } from "./seach-context";
-import { sidebarData, NavItem, NavGroup } from "../app-sidebar";
+import { sidebarData, NavItem } from "../app-sidebar";
 
 export function CommandMenu() {
   const router = useRouter();

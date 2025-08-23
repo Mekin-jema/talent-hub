@@ -1,14 +1,18 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { JobFormValues } from "@/validation/job.validation";
+import { UseFormRegister, FieldErrors, UseFormSetValue } from "react-hook-form";
 
 const jobTypes = ["Full-time", "Part-time", "Contract", "Freelance", "Internship"];
 const categories = ["Engineering", "Design", "Marketing", "Sales", "Support", "Writing", "HR", "Other"];
 
+
+
 interface JobBasicInfoProps {
-  register: any;
-  errors: any;
-  setValue: any;
+  register: UseFormRegister<JobFormValues>;
+  errors: FieldErrors<JobFormValues>;
+  setValue: UseFormSetValue<JobFormValues>;
 }
 
 export default function JobBasicInfo({ register, errors, setValue }: JobBasicInfoProps) {

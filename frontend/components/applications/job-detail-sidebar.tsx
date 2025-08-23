@@ -1,8 +1,10 @@
 import { Button } from "@/components/ui/button";
+import { useApplicationStore } from "@/store/useApplicationStore";
+import { Job } from "@/types";
 import { formatDistanceToNow } from "date-fns";
 
 interface JobDetailSidebarProps {
-  job: any;
+  job: Job;
   saved: boolean;
   applied: boolean;
   onSave: () => void;
@@ -10,6 +12,8 @@ interface JobDetailSidebarProps {
 }
 
 export function JobDetailSidebar({ job, saved, applied, onSave, onApply }: JobDetailSidebarProps) {
+  const { checkIfApplied } = useApplicationStore();
+
   return (
     <div className="space-y-6">
       {/* Apply Box */}
@@ -24,9 +28,9 @@ export function JobDetailSidebar({ job, saved, applied, onSave, onApply }: JobDe
           className="w-full mb-4"
           size="lg"
           onClick={onApply}
-          disabled={applied}
+          disabled={checkIfApplied(job.id)}
         >
-          {applied ? "Applied" : "Apply Now"}
+          {checkIfApplied(job.id) ? "Applied" : "Apply Now"}
         </Button>
         <Button variant="outline" className="w-full" size="lg" onClick={onSave}>
           {saved ? "Saved" : "Save for Later"}
@@ -39,10 +43,13 @@ export function JobDetailSidebar({ job, saved, applied, onSave, onApply }: JobDe
         <div className="flex items-center mb-4">
           <img
             src={job.logo}
-            alt={job.company}
-            className="w-10 h-10 rounded-lg object-cover border mr-3"
+            alt={job.companyName}
+            className="w-12 h-12 rounded-xl object-cover border shadow-sm"
+            onError={(e) => {
+              e.currentTarget.src = "/placeholder-company.png";
+            }}
           />
-          <h4 className="font-medium">{job.company}</h4>
+          <h4 className="font-medium">{job.aboutCompany}</h4>
         </div>
         <p className="text-muted-foreground text-sm">{job.aboutCompany}</p>
       </div>

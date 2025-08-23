@@ -1,9 +1,12 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { JobFormValues } from "@/validation/job.validation";
+import { UseFormSetValue } from "react-hook-form";
 
 interface JobFeaturedProps {
   featured: boolean;
-  setValue: any;
+  setValue: UseFormSetValue<JobFormValues>;
+  
 }
 
 export default function JobFeatured({ featured, setValue }: JobFeaturedProps) {

@@ -31,18 +31,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import { cn } from "@/lib/utils";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import Image from "next/image";
-import GridDistortion from "@/components/animations/grid-distortion";
 import Squares from "@/components/animations/square";
 
 // =======================
@@ -171,15 +163,8 @@ const Hero = ({
   // =======================
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [user, setUser] = useState(true); // logged in mock
-  const [userRole, setUserRole] = useState("employer");
 
-  const mockUser = {
-    name: "John Doe",
-    email: "john@example.com",
-    avatar:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face",
-  };
+
 
   const navLinks = [
     { href: "/jobs", label: "Browse Jobs" },
@@ -187,7 +172,6 @@ const Hero = ({
     { href: "/jobs/create", label: "Post a Job" },
   ];
 
-  const handleLogout = () => console.log("Logging out...");
 
   return (
     <div className="relative  top-4">
@@ -205,7 +189,7 @@ const Hero = ({
               {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
             <Link href="/" className="flex items-center gap-2 pl-5">
-             <Image src="/logo.png" alt="Logo" width={60} height={60} />
+              <Image src="/logo.png" alt="Logo" width={60} height={60} />
               <span className="text-xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
                 TalentHub
               </span>
@@ -242,19 +226,19 @@ const Hero = ({
               <Search className="h-5 w-5" />
             </Button>
 
-              <div className="flex items-center space-x-2">
-                <Button asChild size="sm" className="">
-                  <Link href="/login" className="flex items-center gap-1 px-5">
-                   Login
-                  </Link>
-                </Button>
-                <Button asChild size="sm" variant="outline">
-                  <Link href="/register" className="flex items-center gap-1 px-6">
-                   Register
-                  </Link>
-                </Button>
-              </div>
-        
+            <div className="flex items-center space-x-2">
+              <Button asChild size="sm" className="">
+                <Link href="/login" className="flex items-center gap-1 px-5">
+                  Login
+                </Link>
+              </Button>
+              <Button asChild size="sm" variant="outline">
+                <Link href="/register" className="flex items-center gap-1 px-6">
+                  Register
+                </Link>
+              </Button>
+            </div>
+
           </div>
           <ModeToggle />
         </div>
@@ -281,42 +265,34 @@ const Hero = ({
                     {link.label}
                   </Link>
                 ))}
-   
-          <div className="flex flex-col gap-2 mt-4">
-            <Button asChild size="sm" className="w-full">
-              <Link href="/login" className="flex items-center gap-1">
-                <LogIn className="h-4 w-4" /> Login
-              </Link>
-            </Button>
-            <Button asChild size="sm" className="w-full">
-              <Link href="/register" className="flex items-center gap-1">
-                <UserPlus className="h-4 w-4" /> Register
-              </Link>
-            </Button>
-          </div>
-      
+
+                <div className="flex flex-col gap-2 mt-4">
+                  <Button asChild size="sm" className="w-full">
+                    <Link href="/login" className="flex items-center gap-1">
+                      <LogIn className="h-4 w-4" /> Login
+                    </Link>
+                  </Button>
+                  <Button asChild size="sm" className="w-full">
+                    <Link href="/register" className="flex items-center gap-1">
+                      <UserPlus className="h-4 w-4" /> Register
+                    </Link>
+                  </Button>
+                </div>
+
               </nav>
             </div>
           </div>
         )}
       </header>
 
-     <div className="pointer-events-none absolute inset-0 -z-30">
-        {/* <div className="absolute inset-0 opacity-25 dark:opacity-15">
-          <GridDistortion
-            imageSrc="/diverse-customer-group.png"
-            grid={12}
-            mouse={0.1}
-            strength={0.12}
-            relaxation={0.92}
-          />
-        </div> */}
+      <div className="pointer-events-none absolute inset-0 -z-30">
+
         <Squares />
       </div>
       {/* ======================= Hero Section ======================= */}
-      <section className="w-full bg-transparent">
+      <section className="w-full ">
         <div className="container mx-auto px-4 py-12 md:py-20">
-          <div className="grid items-center gap-12 lg:grid-cols-2 mb-16">
+          <div className="grid items-center gap-12 lg:grid-cols-2 mb-16 bg-background/60 p-7 rounded-3xl">
             {/* Text Content */}
             <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
               {badge && (
@@ -373,7 +349,7 @@ const Hero = ({
               />
             </div>
           </div>
-          
+
           {/* ======================= Featured Jobs ======================= */}
           <div className="py-12 md:py-16">
             <div className="text-center mb-8 md:mb-12">
@@ -458,7 +434,10 @@ const Hero = ({
                             <Star key={i} className={`h-4 w-4 ${i < t.rating ? "text-yellow-400 fill-current" : "text-muted-foreground"}`} />
                           ))}
                         </div>
-                        <p className="text-sm text-muted-foreground italic">"{t.content}"</p>
+                        <p className="text-sm text-muted-foreground italic">
+                          &quot;{t.content}&quot;
+                        </p>
+
                       </div>
                     </div>
                     <div className="flex items-center mt-4 pt-4 border-t">
@@ -486,12 +465,12 @@ const Hero = ({
             {/* Company Info */}
             <div className="space-y-4">
               <div className="flex items-start space-x-2">
-              <Link href="/" className="flex items-center gap-2">
-             <Image src="/logo.png" alt="Logo" width={60} height={60} />
-              <span className="text-xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-                TalentHub
-              </span>
-            </Link>
+                <Link href="/" className="flex items-center gap-2">
+                  <Image src="/logo.png" alt="Logo" width={60} height={60} />
+                  <span className="text-xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                    TalentHub
+                  </span>
+                </Link>
               </div>
               <p className="text-muted-foreground max-w-xs">
                 Connecting talented professionals with amazing opportunities. Find your dream job or the perfect candidate.

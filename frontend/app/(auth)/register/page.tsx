@@ -58,6 +58,7 @@ export default function SignupPage() {
       form.reset();
      }
     } catch (error) {
+      console.error(error)
       toast.error("Unexpected error occurred");
     } finally {
       setIsLoading(false);

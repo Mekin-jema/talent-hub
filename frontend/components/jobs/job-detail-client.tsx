@@ -20,7 +20,8 @@ export default function JobDetailClient({ id }: { id: string }) {
   const [applicationStep, setApplicationStep] = useState(1);
   const [resume, setResume] = useState<File | null>(null);
 
-  const { currentJob, getJobById, loading, error } = useJobStore();
+  const { currentJob, getJobById, loading} = useJobStore();
+  
 
   // Fetch job on mount
   useEffect(() => {

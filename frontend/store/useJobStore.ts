@@ -12,7 +12,7 @@ const JOBS_API_URL = `${API_BASE_URL}/jobs`;
 
 interface JobStoreState {
   jobs: Job[];
-  currentJob: JobFormValues | null;
+  currentJob: Job ;
   loading: boolean;
   error: string | null;
 
@@ -27,7 +27,7 @@ export const useJobStore = create<JobStoreState>()(
   persist(
     (set, get) => ({
       jobs: [],
-      currentJob: null,
+      currentJob:{} as Job,
       loading: false,
       error: null,
 

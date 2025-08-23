@@ -1,3 +1,10 @@
+
+export interface Skill {
+  id:String,
+  name:String
+  jobId:String
+}
+
 export interface Job {
   id: string;
   title: string;
@@ -7,13 +14,14 @@ export interface Job {
   responsibilities: string[];
   location: string;
   aboutCompany: string;
+  companyName:string,
   logo: string;
   salary: string;
   posted: string;      // ISO date string
   updatedAt: string;   // ISO date string
   category: string;
   featured: boolean;
-    skills: string[];
+    skills: Skill[];
   userId: string;
   createdBy: {
     id: string;
@@ -27,11 +35,6 @@ export interface Job {
 
 
 
-export interface Skill {
-  id: string;
-  name: string;
-  jobId: string;
-}
 
 export interface CreatedBy {
   id: string;

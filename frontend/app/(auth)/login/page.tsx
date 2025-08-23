@@ -55,6 +55,7 @@ export default function LoginPage() {
 
       form.reset();
     } catch (error) {
+      console.error("Login error:", error);
       toast.error("Unexpected error occurred");
     } finally {
       setIsLoading(false);
@@ -153,7 +154,7 @@ export default function LoginPage() {
 
           {/* <div className="bg-muted rounded-(--radius) border p-3"> */}
             <p className=" text-center text-sm p-3">
-              Don't have an account?{" "}
+              Don&apos;t have an account?{" "}
               <Button asChild variant="link" className="px-2">
                 <Link href="/register">Create account</Link>
               </Button>

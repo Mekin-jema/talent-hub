@@ -1,7 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { JobFormValues } from "@/validation/job.validation";
 import { Plus, X } from "lucide-react";
+import { FieldErrors } from "react-hook-form";
 
 const sampleSkills = ["React", "Node.js", "TypeScript", "Python", "JavaScript", "CSS", "HTML", "GraphQL", "AWS"];
 
@@ -9,7 +11,7 @@ interface JobSkillsProps {
   skills: string[];
   skillInput: string;
   setSkillInput: (value: string) => void;
-  errors: any;
+  errors: FieldErrors<JobFormValues>;
   addSkill: (skill: string) => void;
   removeSkill: (skillToRemove: string) => void;
 }

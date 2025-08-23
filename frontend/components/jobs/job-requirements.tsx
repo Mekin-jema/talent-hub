@@ -1,11 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { JobFormValues } from "@/validation/job.validation";
 import { Plus, X } from "lucide-react";
+import { FieldErrors } from "react-hook-form";
 
 interface JobRequirementsProps {
   requirements: string[];
-  errors: any;
+  errors: FieldErrors<JobFormValues>;
   addRequirement: () => void;
   removeRequirement: (index: number) => void;
   updateRequirement: (index: number, value: string) => void;

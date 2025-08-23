@@ -1,15 +1,5 @@
-import React, { ReactNode } from "react";
-
-// import {
-//   Breadcrumb,
-//   BreadcrumbItem,
-//   BreadcrumbLink,
-//   BreadcrumbList,
-//   BreadcrumbPage,
-//   BreadcrumbSeparator,
-// } from "@/components/ui/breadcrumb"
-import { Separator } from "@/components/ui/separator"
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import React from "react";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar";
 import Header from "@/components/dashboard/header";
 import { SearchProvider } from "@/components/dashboard/seach-context";

@@ -9,9 +9,10 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { Building2, MapPin, DollarSign, Clock, Search, Bookmark, BookmarkCheck, Filter, X, ChevronDown, ChevronUp, Users } from "lucide-react";
+import { Building2, MapPin,  Clock, Search, Bookmark, BookmarkCheck,  ChevronDown, ChevronUp, Users } from "lucide-react";
 import { useJobStore } from "@/store/useJobStore";
 import { useApplicationStore } from "@/store/useApplicationStore";
+import { formatDistanceToNow } from "date-fns";
 
 export default function AllJobsPage() {
   const router = useRouter();
@@ -95,10 +96,7 @@ export default function AllJobsPage() {
     const matchesSearch =
       (job.title ?? "").toLowerCase().includes(searchLower) ||
       (typeof job.aboutCompany === "string" && job.aboutCompany.toLowerCase().includes(searchLower)) ||
-      (job.skills as (string | { name: string })[] | undefined)?.some(skill =>
-        typeof skill === "string"
-          ? skill.toLowerCase().includes(searchLower)
-          : skill.name.toLowerCase().includes(searchLower)
+      job.skills ?.some(skill =>skill.name.toLowerCase().includes(searchLower)
       );
 
     const matchesCategory = filters.category ? job.category === filters.category : true;
@@ -120,17 +118,7 @@ export default function AllJobsPage() {
   };
 
   // Format date function
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffTime = Math.abs(now.getTime() - date.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    if (diffDays === 1) return "1 day ago";
-    if (diffDays < 7) return `${diffDays} days ago`;
-    if (diffDays < 30) return `${Math.ceil(diffDays / 7)} weeks ago`;
-    return `${Math.ceil(diffDays / 30)} months ago`;
-  };
 
   if (loading) {
     return (
@@ -343,7 +331,7 @@ export default function AllJobsPage() {
                             <h3 className="font-semibold text-lg leading-snug">{job.title}</h3>
                             <p className="text-muted-foreground flex items-center text-sm mt-1">
                               <Building2 className="w-4 h-4 mr-1 opacity-70" />
-                              <span className="truncate">{companyName}</span>
+                              <span className="truncate">{job.companyName?job.companyName:companyName}</span>
                             </p>
                           </div>
                         </div>
@@ -389,7 +377,7 @@ export default function AllJobsPage() {
                       </div>
                       {job.skills && job.skills.length > 0 && (
                         <div className="flex flex-wrap gap-1 mt-2">
-                          {(job.skills as (string | { name: string })[]).slice(0, 3).map((skill, index) => (
+                          {(job.skills).slice(0, 3).map((skill, index) => (
                             <Badge key={index} variant="secondary" className="text-xs">
                               {typeof skill === 'string' ? skill : skill.name}
                             </Badge>
@@ -408,18 +396,17 @@ export default function AllJobsPage() {
                     <CardFooter className="flex flex-col md:flex-row justify-between items-center gap-4 pt-3 border-t">
                       {/* Salary & Posted Info */}
                       <div className="flex items-center text-sm text-muted-foreground">
-                        <DollarSign className="w-4 h-4 mr-1" />
                         {job.salary ? `$${job.salary}` : 'Salary not specified'}
                         <span className="mx-2">•</span>
                         <Clock className="w-4 h-4 mr-1" />
-                        {(job as any).posted ? `Posted ${formatDate((job as any).posted as string)}` : 'Recently posted'}
+                        {job.posted ? `Posted ${formatDistanceToNow(job.posted)}` : 'Recently posted'}
                       </div>
 
                       {/* Applications Info */}
                       <div className="flex items-center text-sm text-muted-foreground">
                         <Users className="w-4 h-4 mr-2" />
-                        <span className="font-medium text-foreground">{job._count.applications}</span>{" "}
-                        {job._count.applications === 1 ? "person has" : "people have"} applied for this job
+                        <span className="text-foreground font-bold pr-1.5">{job._count.applications}</span>{" "}
+                        {job._count.applications === 1 ? " person has" : " people have"} applied for this job
                       </div>
 
                       {/* Apply Button */}

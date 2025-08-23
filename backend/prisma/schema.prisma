@@ -51,7 +51,8 @@ model Job {
   requirements     Json?     // ["3+ years React", "TypeScript"] as JSON array
   responsibilities Json?     // ["Build APIs", "Write tests"] as JSON array
   location         String?                           // Job location (Remote/Onsite)
-  aboutCompany     String?                           // Info about hiring company
+  aboutCompany     String?   
+  companyName      String? @default("Private Company")                        // Info about hiring company
   logo             String?                           // Company logo URL
   salary           String?                           // Salary range ("$4000-$6000")
   posted           DateTime? @default(now())        // When job was posted
