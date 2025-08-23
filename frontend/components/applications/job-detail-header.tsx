@@ -3,9 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { formatDistanceToNow } from "date-fns";
+import { Job } from "@/types";
 
 interface JobDetailHeaderProps {
-  job: any;
+  job: Job;
   saved: boolean;
   onSave: () => void;
   onShare: () => void;
@@ -35,7 +36,7 @@ export function JobDetailHeader({ job, saved, onSave, onShare }: JobDetailHeader
             <h1 className="text-2xl md:text-3xl font-bold mb-2">{job.title}</h1>
             <div className="flex items-center text-muted-foreground mb-2">
               <Building2 className="w-4 h-4 mr-2" />
-              {job.company}
+              {job.aboutCompany}
             </div>
             <div className="flex flex-wrap gap-2">
               <Badge variant="secondary" className="flex items-center">
