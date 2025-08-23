@@ -44,6 +44,7 @@ export const useJobStore = create<JobStoreState>()(
       },
 
       getJobById: async (id: string) => {
+        console.log("Fetching job with ID:", id);
         try {
           set({ loading: true });
           const res = await axios.get(`${JOBS_API_URL}/${id}`);

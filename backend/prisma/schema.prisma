@@ -54,7 +54,7 @@ model Job {
   aboutCompany     String?                           // Info about hiring company
   logo             String?                           // Company logo URL
   salary           String?                           // Salary range ("$4000-$6000")
-  posted           DateTime?                         // When job was posted
+  posted           DateTime? @default(now())        // When job was posted
   updatedAt        DateTime @updatedAt               // Last updated timestamp
   category         String?                           // e.g. Engineering, Marketing
   featured         Boolean @default(false)           // Highlighted job or not

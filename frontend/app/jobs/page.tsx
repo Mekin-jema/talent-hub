@@ -36,11 +36,12 @@ export default function AllJobsPage() {
   }, [fetchJobs]);
 
   // Extract unique categories, locations, and job types for filters from actual data
-  const categories = [...new Set(jobs.map(job => job.category))];
-  const locations = [...new Set(jobs.map(job => job.location))];
-  const jobTypes = [...new Set(jobs.map(job => job.type))];
+  const categories = [...new Set(jobs.map(job => job.category).filter((v): v is string => typeof v === "string" && v.trim() !== ""))];
+  const locations = [...new Set(jobs.map(job => job.location).filter((v): v is string => typeof v === "string" && v.trim() !== ""))];
+  const jobTypes = [...new Set(jobs.map(job => job.type).filter((v): v is string => typeof v === "string" && v.trim() !== ""))];
 
-  const handleApply = (jobId: string) => {
+  const handleApply = (jobId?: string) => {
+    if (!jobId) return;
     if (appliedJobs.includes(jobId)) {
       alert("You already applied for this job!");
       return;
@@ -48,7 +49,8 @@ export default function AllJobsPage() {
     router.push(`/jobs/${jobId}`);
   };
 
-  const handleSave = (jobId: string) => {
+  const handleSave = (jobId?: string) => {
+    if (!jobId) return;
     if (savedJobs.includes(jobId)) {
       setSavedJobs(savedJobs.filter((id) => id !== jobId));
     } else {
@@ -81,12 +83,14 @@ export default function AllJobsPage() {
 
   // Filter jobs by search term and filters
   const filteredJobs = jobs.filter((job) => {
+    const searchLower = search.toLowerCase();
     const matchesSearch = 
-      job.title.toLowerCase().includes(search.toLowerCase()) ||
-      (job.company && job.company.toLowerCase().includes(search.toLowerCase())) ||
-      job.skills?.some(skill => 
-        typeof skill === 'string' ? skill.toLowerCase().includes(search.toLowerCase()) :
-        skill.name.toLowerCase().includes(search.toLowerCase())
+      (job.title ?? "").toLowerCase().includes(searchLower) ||
+      (typeof job.aboutCompany === "string" && job.aboutCompany.toLowerCase().includes(searchLower)) ||
+      (job.skills as (string | { name: string })[] | undefined)?.some(skill => 
+        typeof skill === "string"
+          ? skill.toLowerCase().includes(searchLower)
+          : skill.name.toLowerCase().includes(searchLower)
       );
 
     const matchesCategory = filters.category ? job.category === filters.category : true;
@@ -102,7 +106,8 @@ export default function AllJobsPage() {
 
   const activeFiltersCount = Object.values(filters).filter(value => value !== "").length;
 
-  const viewJobDetails = (jobId: string) => {
+  const viewJobDetails = (jobId?: string) => {
+    if (!jobId) return;
     router.push(`/jobs/${jobId}`);
   };
 
@@ -299,9 +304,12 @@ export default function AllJobsPage() {
           {filteredJobs.length > 0 ? (
             <div className="space-y-4">
               {filteredJobs.map((job) => {
+                if (!job.id) return null; // Skip jobs without an id to satisfy type narrowing
                 const applied = appliedJobs.includes(job.id);
                 const saved = savedJobs.includes(job.id);
-                const companyName = job.createdBy?.fullName || job.company || "Private Company";
+                // const companyName = job.posted?.fullName || job.company || "Private Company";
+                const companyName =  "Private Company";
+
                 const logo = job.logo || "/placeholder-company.png";
 
                 return (
@@ -368,7 +376,7 @@ export default function AllJobsPage() {
                       </div>
                       {job.skills && job.skills.length > 0 && (
                         <div className="flex flex-wrap gap-1 mt-2">
-                          {job.skills.slice(0, 3).map((skill, index) => (
+                          {(job.skills as (string | { name: string })[]).slice(0, 3).map((skill, index) => (
                             <Badge key={index} variant="secondary" className="text-xs">
                               {typeof skill === 'string' ? skill : skill.name}
                             </Badge>
@@ -388,7 +396,7 @@ export default function AllJobsPage() {
                         {job.salary ? `$${job.salary}` : 'Salary not specified'}
                         <span className="mx-2">•</span>
                         <Clock className="w-4 h-4 mr-1" />
-                        {job.posted ? `Posted ${formatDate(job.posted)}` : 'Recently posted'}
+                        {(job as any).posted ? `Posted ${formatDate((job as any).posted as string)}` : 'Recently posted'}
                       </div>
                       <Button
                         size="sm"

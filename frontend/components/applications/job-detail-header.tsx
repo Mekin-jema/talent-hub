@@ -2,6 +2,7 @@
 import { Building2, MapPin, DollarSign, Clock, CheckCircle, Bookmark, BookmarkCheck, Share } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
 
 interface JobDetailHeaderProps {
   job: any;
@@ -12,13 +13,15 @@ interface JobDetailHeaderProps {
 }
 
 export function JobDetailHeader({ job, saved, onSave, onShare, onBack }: JobDetailHeaderProps) {
+  console.log("Job",job)
   return (
     <div className="bg-card rounded-lg p-6 mb-6 shadow-sm border">
       <div className="flex flex-col md:flex-row md:items-start justify-between mb-6">
         <div className="flex items-start space-x-4">
-          <img
-            src={job.logo}
-            alt={job.company}
+          <Image
+            src={job?.logo ||"./sample-logo.png"}
+            alt={job.aboutCompany}
+            width={100} height={100}
             className="w-16 h-16 rounded-lg object-cover border"
           />
           <div>

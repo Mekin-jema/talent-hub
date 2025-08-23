@@ -6,6 +6,7 @@ interface JobDetailContentProps {
 }
 
 export function JobDetailContent({ job }: JobDetailContentProps) {
+  console.log("Job in Content", job);
   return (
     <div className="lg:col-span-2 space-y-6">
       {/* Job Description */}
@@ -44,9 +45,9 @@ export function JobDetailContent({ job }: JobDetailContentProps) {
       <div className="bg-card rounded-lg p-6 shadow-sm border">
         <h2 className="text-xl font-semibold mb-4">Skills Required</h2>
         <div className="flex flex-wrap gap-2">
-          {job.skills.map((skill: string, index: number) => (
-            <Badge key={index} variant="secondary" className="text-sm">
-              {skill}
+          {job.skills.map((skill: { id: string; name: string }) => (
+            <Badge key={skill.id} variant="secondary" className="text-sm">
+              {skill.name}
             </Badge>
           ))}
         </div>

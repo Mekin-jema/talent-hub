@@ -33,10 +33,11 @@ exports.getJobById = async (req, res) => {
   const job = await prisma.job.findUnique({
     where: { id: req.params.id },
     include: {
-      createdBy: { select: { id: true, name: true, email: true } },
+      skills: true,
+      createdBy: { select: { id: true, fullName: true, email: true } },
       applications: {
         include: {
-          applicant: { select: { id: true, name: true, email: true } }
+          applicant: { select: { id: true, fullName: true, email: true } }
         }
       },
       _count: { select: { applications: true } }

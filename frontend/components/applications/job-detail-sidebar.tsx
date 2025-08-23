@@ -1,5 +1,5 @@
-// components/jobs/JobDetailSidebar.tsx
 import { Button } from "@/components/ui/button";
+import { formatDistanceToNow } from "date-fns";
 
 interface JobDetailSidebarProps {
   job: any;
@@ -65,7 +65,11 @@ export function JobDetailSidebar({ job, saved, applied, onSave, onApply }: JobDe
           </div>
           <div className="flex justify-between">
             <span className="text-muted-foreground">Posted:</span>
-            <span className="font-medium">{job.posted}</span>
+            <span className="font-medium">
+              {job.posted
+                ? formatDistanceToNow(new Date(job.posted), { addSuffix: true })
+                : "N/A"}
+            </span>
           </div>
         </div>
       </div>
