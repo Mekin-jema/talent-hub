@@ -10,13 +10,14 @@ const API_BASE_URL = process.env.BACKEND_API_URL || 'http://localhost:5000/api/v
 const AUTH_API_URL = `${API_BASE_URL}/auth`;
 
 interface User {
+  user: any;
   id: string;
   email: string;
   token?: string;
   firstName?: string;
   middleName?: string;
   lastName?: string;
-  role?: string;
+  role: string;
   tier?: string;
   phone?: string;
   avatar?: string;
@@ -30,7 +31,12 @@ interface UserStoreState {
   user: User | null;
 
   signup: (input: SignupFormType) => Promise<{ message?: string }>;
-  login: (input: loginFormType) => Promise<User>;
+  login: (input: loginFormType) => Promise<{
+    role: string;
+    user:{
+      role:string
+    }
+  }>;
   loginWithProvider: (provider: 'google' | 'github', code: string) => Promise<User>;
   verifyEmail: (token: string) => Promise<User>;
   checkAuth: () => void;
@@ -84,7 +90,7 @@ export const useAuthStore = create<UserStoreState>()(
           set({ user: { ...userData, token }, isAuthenticated: true });
           toast.success('Login successful');
 
-          return { ...userData, token };
+          return res.data.data.user;
         } catch (err) {
           handleError(err, 'Login failed');
           throw err;

@@ -4,7 +4,6 @@ import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -17,6 +16,7 @@ import { GithubIcon } from "@/components/icons/GithubIcon";
 import { useAuthStore } from "@/store/useAuthStore";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import NotFound from "@/app/not-found";
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -25,7 +25,8 @@ export default function LoginPage() {
   const router = useRouter();
 
   // import user store
-  const {login} = useAuthStore();
+  const {login,user} = useAuthStore();
+  console.log("Login page user:", user);
 
   const form = useForm<loginFormType>({
     resolver: zodResolver(loginSchema),
@@ -50,13 +51,24 @@ export default function LoginPage() {
 
   const onSubmit = async (data: loginFormType) => {
     try {
-      login(data);
-      router.push("/profile");
+       const response = await login(data);
+       console.log("Login response:", response);
 
-      form.reset();
+
+      // form.reset();
+        // Redirect based on role
+    if (response.role==="EMPLOYER") {
+      router.push("/employer");
+    } else if (response.role==="DEVELOPER") {
+      router.push("/developer");
+    } else if (response.role==="ADMIN") {
+      router.push("/admin");
+    } else {
+     return <NotFound />
+    }
     } catch (error) {
       console.error("Login error:", error);
-      toast.error("Unexpected error occurred");
+      // toast.error("Unexpected error occurred");
     } finally {
       setIsLoading(false);
     }

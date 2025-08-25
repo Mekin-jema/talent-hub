@@ -154,5 +154,5 @@ enum Role {
 enum ApplicationStatus {
   APPLIED       // Initial state
   SHORTLISTED   // Candidate shortlisted
-  REJECTED      // Candidate rejected
+  REJECTED      // Caandidate rejected
 }

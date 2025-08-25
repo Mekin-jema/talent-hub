@@ -20,6 +20,7 @@ import {
   Filter
 } from 'lucide-react';
 import DashboardTabs from '@/components/employer/DashboardTabs';
+import Link from 'next/link';
 
 // Mock data types
 interface Job {
@@ -182,10 +183,12 @@ const EmployerDashboard = () => {
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Employer Dashboard</h1>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" />
-          Post New Job
-        </Button>
+<Button asChild variant="default">
+  <Link href="/jobs/create" className="flex items-center">
+    <Plus className="mr-2 h-4 w-4" />
+    Post New Job
+  </Link>
+</Button>
       </div>
 
       <DashboardTabs 
