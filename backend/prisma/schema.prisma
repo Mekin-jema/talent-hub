@@ -65,7 +65,8 @@ model Job {
   skills           Skill[]                           // Required skills
   createdBy        User      @relation("JobPoster", fields: [userId], references: [id])  
   userId           String                             // Employer who created the job
-  applications     Application[]       
+  applications     Application[]   
+  status             JobStatus @default(OPEN)       // Current status of the job
                  // Applications for this job
   
 
@@ -93,6 +94,9 @@ model Application {
   jobId       String
   applicant   User     @relation(fields: [userId], references: [id])  // Applicant (User)
   userId      String
+
+
+
 
   @@unique([userId, jobId]) // Prevent duplicate applications per job
   @@map("applications")     // Map to "applications" table
@@ -154,5 +158,15 @@ enum Role {
 enum ApplicationStatus {
   APPLIED       // Initial state
   SHORTLISTED   // Candidate shortlisted
-  REJECTED      // Caandidate rejected
+  REJECTED      // Candidate rejected
+  INTERVIEW     // Interview scheduled
+  HIRED         // Candidate hired
 }
+
+
+enum JobStatus {
+  OPEN       // Job is open for applications
+  CLOSED     // Job is closed
+}
+
+

@@ -2,6 +2,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Briefcase, Users, Calendar, Bell } from 'lucide-react';
 import { Badge } from '../ui/badge';
+import { Application } from '@/store/useApplicationStore';
+import { Job } from '@/types';
 
 interface Notification {
   id: string;
@@ -16,13 +18,20 @@ interface StatsOverviewProps {
     totalApplications: number;
     unreadNotifications: number;
   };
-  jobs: any[];
-  applications: any[];
+  jobs: Job[];
+  applications: Application[];
   notifications: Notification[]; // ✅ Added here
+}
+enum ApplicationStatus {
+  APPLIED = "APPLIED",
+  SHORTLISTED = "SHORTLISTED",
+  REJECTED = "REJECTED",
+  INTERVIEW = "INTERVIEW",
+  HIRED = "HIRED"
 }
 
 const StatsOverview = ({ stats, jobs, applications, notifications }: StatsOverviewProps) => {
-  const activeJobs = jobs.filter(job => job.status === 'active').length;
+  const activeJobs = jobs.filter(job => job.status === 'OPEN').length;
   const interviewCount = applications.filter(app => app.status === 'interview').length;
   const interviewRate = applications.length > 0 
     ? Math.round((interviewCount / applications.length) * 100) 
@@ -99,13 +108,13 @@ const StatsOverview = ({ stats, jobs, applications, notifications }: StatsOvervi
               {applications.slice(0, 3).map((application) => (
                 <div key={application.id} className="flex items-center justify-between p-3 border rounded-lg">
                   <div>
-                    <p className="font-medium">{application.applicantName}</p>
-                    <p className="text-sm text-muted-foreground">{application.jobTitle}</p>
+                    <p className="font-medium">{application.applicant.fullName}</p>
+                    <p className="text-sm text-muted-foreground">{application.job.title}</p>
                   </div>
                   <Badge variant={
-                    application.status === 'shortlisted' ? 'default' :
-                    application.status === 'interview' ? 'secondary' :
-                    application.status === 'rejected' ? 'destructive' : 'outline'
+                    application.status === ApplicationStatus.SHORTLISTED ? 'default' :
+                    application.status === ApplicationStatus.INTERVIEW ? 'secondary' :
+                    application.status === ApplicationStatus.REJECTED ? 'destructive' : 'outline'
                   }>
                     {application.status}
                   </Badge>

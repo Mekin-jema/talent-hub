@@ -5,23 +5,23 @@ import Header from "@/components/dashboard/header";
 import { SearchProvider } from "@/components/dashboard/seach-context";
 import PrivateRoute from "@/components/PrivateRoute";
 
-const DashboardLayout=({children}:{children:React.ReactNode})=> {
+const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-      <PrivateRoute allowedRole={"ADMIN"}>
+    <PrivateRoute allowedRole={"ADMIN"}>
 
-          <SearchProvider>
-    <SidebarProvider>
+      <SearchProvider>
+        <SidebarProvider>
 
-      <AppSidebar />
-      <SidebarInset>
-          <Header/>
-    
+          <AppSidebar />
+          <SidebarInset>
+            <Header />
+
             {children}
-      </SidebarInset>
+          </SidebarInset>
 
-    </SidebarProvider>
-          </SearchProvider>
-      </PrivateRoute>
+        </SidebarProvider>
+      </SearchProvider>
+    </PrivateRoute>
   )
 }
 

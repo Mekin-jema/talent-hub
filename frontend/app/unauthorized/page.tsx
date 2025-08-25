@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Lock, Home, Shield, AlertTriangle, MoveLeft } from "lucide-react";
+import { Lock,Shield, AlertTriangle, MoveLeft } from "lucide-react";
 
 export default function UnauthorizedPage() {
   return (
@@ -37,7 +37,7 @@ export default function UnauthorizedPage() {
                 Unauthorized Access
               </p>
               <p className="text-gray-500 dark:text-gray-400">
-                You don't have permission to view this page. Please contact your administrator if you believe this is an error.
+                You don&apos;t have permission to view this page. Please contact your administrator if you believe this is an error.
               </p>
             </div>
 
@@ -48,7 +48,7 @@ export default function UnauthorizedPage() {
                 <div>
                   <p className="text-sm font-medium text-blue-800 dark:text-blue-200">Security Notice</p>
                   <p className="text-xs text-blue-600 dark:text-blue-300">
-                    This area requires special permissions. Ensure you're logged in with the correct account.
+                    This area requires special permissions. Ensure you&apos;re logged in with the correct account.
                   </p>
                 </div>
               </div>

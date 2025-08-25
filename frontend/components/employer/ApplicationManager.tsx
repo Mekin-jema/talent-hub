@@ -5,10 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Search, Filter, Mail, Download } from 'lucide-react';
+import { Job } from '@/types';
+import { Application } from '@/store/useApplicationStore';
 
 interface ApplicationManagerProps {
-  applications: any[];
-  jobs: any[];
+  applications: Application[];
+  jobs: Job[];
   selectedJobId: string | null;
   onJobSelect: (jobId: string | null) => void;
 }
@@ -18,13 +20,13 @@ const ApplicationManager = ({ applications, jobs, selectedJobId, onJobSelect }: 
 
   // Filter applications based on selected job
   const filteredApplications = selectedJobId
-    ? applications.filter(app => app.jobId === selectedJobId)
+    ? applications.filter(app => app.job.id=== selectedJobId)
     : applications;
 
   // Filter applications based on search term
   const searchedApplications = filteredApplications.filter(app =>
-    app.applicantName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    app.jobTitle.toLowerCase().includes(searchTerm.toLowerCase())
+    app.applicant.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    app.job.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -80,10 +82,10 @@ const ApplicationManager = ({ applications, jobs, selectedJobId, onJobSelect }: 
             <div key={application.id} className="p-4 border rounded-lg">
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="font-semibold">{application.applicantName}</h3>
-                  <p className="text-sm text-muted-foreground">{application.applicantEmail}</p>
-                  <p className="text-sm mt-1">Applied for: {application.jobTitle}</p>
-                  <p className="text-sm">Applied on: {new Date(application.appliedDate).toLocaleDateString()}</p>
+                  <h3 className="font-semibold">{application.applicant.fullName}</h3>
+                  <p className="text-sm text-muted-foreground">{application.applicant.email}</p>
+                  <p className="text-sm mt-1">Applied for: {application.job.title}</p>
+                  <p className="text-sm">Applied on: {new Date(application.createdAt).toLocaleDateString()}</p>
                 </div>
                 <Badge variant={
                   application.status === 'shortlisted' ? 'default' :

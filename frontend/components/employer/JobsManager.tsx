@@ -1,15 +1,17 @@
-// components/employer/JobsManager.tsx
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Job } from '@/types';
 
 interface JobsManagerProps {
-  jobs: any[];
+  jobs: Job[];
   selectedJobId: string | null;
   onSelectJob: (jobId: string) => void;
 }
 
 const JobsManager = ({ jobs, selectedJobId, onSelectJob }: JobsManagerProps) => {
+  const selectedJob = jobs.find((job) => job.id === selectedJobId);
+
   return (
     <Card>
       <CardHeader>
@@ -21,27 +23,28 @@ const JobsManager = ({ jobs, selectedJobId, onSelectJob }: JobsManagerProps) => 
       <CardContent>
         <div className="space-y-4">
           {jobs.map((job) => (
-            <div key={job.id} className="flex items-center justify-between p-4 border rounded-lg">
+            <div
+              key={job.id}
+              className={`flex items-center justify-between p-4 border rounded-lg ${
+                selectedJobId === job.id ? "border-blue-500 bg-blue-50" : ""
+              }`}
+            >
               <div>
                 <h3 className="font-semibold">{job.title}</h3>
                 <p className="text-sm text-muted-foreground">
-                  {job.type} • {job.location} • Posted on {new Date(job.posted).toLocaleDateString()}
+                  {job.type} • {job.location} • Posted on{" "}
+                  {new Date(job.posted).toLocaleDateString()}
                 </p>
                 <p className="text-sm mt-1">
-                  <span className="font-medium">{job.applications}</span> applications
+                  <span className="font-medium">{job.applications.length}</span>{" "}
+                  applications
                 </p>
               </div>
               <div className="flex items-center gap-2">
-                <Badge variant={
-                  job.status === 'active' ? 'default' :
-                  job.status === 'closed' ? 'secondary' : 'outline'
-                }>
-                  {job.status}
-                </Badge>
                 <Button variant="outline" size="sm">Edit</Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={() => onSelectJob(job.id)}
                 >
                   View Applications
@@ -50,6 +53,33 @@ const JobsManager = ({ jobs, selectedJobId, onSelectJob }: JobsManagerProps) => 
             </div>
           ))}
         </div>
+
+        {selectedJob && (
+          <div className="mt-6 p-4 border rounded-lg bg-muted">
+            <h2 className="text-xl font-bold mb-2">{selectedJob.title}</h2>
+            <p className="text-sm text-muted-foreground mb-2">
+              {selectedJob.type} • {selectedJob.location} • Posted on{" "}
+              {new Date(selectedJob.posted).toLocaleDateString()}
+            </p>
+            <p className="mb-4">{selectedJob.description}</p>
+
+            <div className="flex flex-wrap gap-2 mb-4">
+              {selectedJob.skills?.map((skill, idx) => (
+                <Badge key={idx} variant="secondary">
+                  {typeof skill === 'string'
+                    ? skill
+                    : (skill && typeof skill === 'object' && 'name' in skill)
+                      ? (skill as any).name
+                      : String(skill)}
+                </Badge>
+              ))}
+            </div>
+
+            <p className="text-sm">
+              <span className="font-medium">{selectedJob.applications.length}</span> applications received
+            </p>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

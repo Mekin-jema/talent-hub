@@ -1,7 +1,6 @@
 import { Building2, MapPin, DollarSign, Clock, CheckCircle, Bookmark, BookmarkCheck, Share, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import Image from "next/image";
 import { formatDistanceToNow } from "date-fns";
 import { Job } from "@/types";
 
@@ -17,21 +16,21 @@ interface JobDetailHeaderProps {
 export function JobDetailHeader({ job, saved, onSave, onShare }: JobDetailHeaderProps) {
   const logo = job.logo || "/placeholder-company.png";
 
-                const companyName = "Private Company";
+  const companyName = "Private Company";
 
   return (
     <div className="bg-card rounded-lg p-6 mb-6 shadow-sm border">
       {/* Top Section */}
       <div className="flex flex-col md:flex-row md:items-start justify-between mb-6">
         <div className="flex items-start space-x-4">
-               <img
-                              src={logo}
-                              alt={companyName}
-                              className="w-12 h-12 rounded-xl object-cover border shadow-sm"
-                              onError={(e) => {
-                                e.currentTarget.src = "/placeholder-company.png";
-                              }}
-                            />
+          <img
+            src={logo}
+            alt={companyName}
+            className="w-12 h-12 rounded-xl object-cover border shadow-sm"
+            onError={(e) => {
+              e.currentTarget.src = "/placeholder-company.png";
+            }}
+          />
           <div>
             <h1 className="text-2xl md:text-3xl font-bold mb-2">{job.title}</h1>
             <div className="flex items-center text-muted-foreground mb-2">

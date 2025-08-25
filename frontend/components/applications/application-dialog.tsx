@@ -12,7 +12,6 @@ import { Loader2, CheckCircle, Upload } from "lucide-react";
 import { applicationFormSchema, ApplicationFormValues } from "@/validation/application.validation";
 import { useApplicationStore } from "@/store/useApplicationStore";
 import { Job } from "@/types";
-import { uploadFileToCloudinary } from "@/lib/cloudinary";
 
 
 interface ApplicationDialogProps {

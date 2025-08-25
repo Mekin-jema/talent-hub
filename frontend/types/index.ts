@@ -1,3 +1,4 @@
+import { Application } from "@/store/useApplicationStore";
 
 export interface Skill {
   id:String,
@@ -31,11 +32,17 @@ export interface Job {
   _count: {
     applications: number;
   };
+  applications: Application[];
+  status: JobStatus;
+
+
+
 }
 
-
-
-
+ enum JobStatus {
+   OPEN = "OPEN",
+   CLOSED = "CLOSED"
+}
 export interface CreatedBy {
   id: string;
   fullName: string;

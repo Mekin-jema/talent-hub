@@ -10,12 +10,19 @@ import JobsManager from './JobsManager';
 import ApplicationManager from './ApplicationManager';
 import NotificationPanel from './NotificationPanel';
 import { Skeleton } from '../ui/skeleton';
+import { Job } from '@/types';
+import { Application } from '@/store/useApplicationStore';
 
 
 interface DashboardTabsProps {
-  jobs: any[];
-  applications: any[];
-  notifications: any[];
+  jobs: Job[];
+  applications: Application[];
+  notifications: {
+    id: string;
+    message: string;
+    isRead: boolean;
+    createdAt: string;
+  }[];
   stats: {
     totalJobs: number;
     totalApplications: number;
