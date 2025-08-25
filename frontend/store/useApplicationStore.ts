@@ -16,6 +16,7 @@ export interface Application {
   createdAt: string;
   updatedAt: string;
   resumeUrl?: string | null;
+  coverLetter?: string | null;
   extraData?: Record<string, any>;
   job: {
     id: string;

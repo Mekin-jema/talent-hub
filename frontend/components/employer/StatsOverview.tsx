@@ -52,9 +52,9 @@ const StatsOverview = ({ stats, jobs, applications, notifications }: StatsOvervi
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.totalApplications}</div>
-            <p className="text-xs text-muted-foreground">
+            {/* <p className="text-xs text-muted-foreground">
               +5 from last week
-            </p>
+            </p> */}
           </CardContent>
         </Card>
 

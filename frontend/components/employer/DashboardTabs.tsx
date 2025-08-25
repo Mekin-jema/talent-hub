@@ -9,6 +9,7 @@ import StatsOverview from './StatsOverview';
 import JobsManager from './JobsManager';
 import ApplicationManager from './ApplicationManager';
 import NotificationPanel from './NotificationPanel';
+import { Skeleton } from '../ui/skeleton';
 
 
 interface DashboardTabsProps {
@@ -20,12 +21,26 @@ interface DashboardTabsProps {
     totalApplications: number;
     unreadNotifications: number;
   };
+  loading: boolean;
 }
 
-const DashboardTabs = ({ jobs, applications, notifications, stats }: DashboardTabsProps) => {
+const DashboardTabs = ({ jobs, applications, notifications, stats, loading }: DashboardTabsProps) => {
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
-
+  if (loading) {
+    return (
+      <Tabs defaultValue="overview" className="space-y-4">
+        <TabsList>
+          <Skeleton className="h-10 w-32" />
+          <Skeleton className="h-10 w-32" />
+          <Skeleton className="h-10 w-32" />
+        </TabsList>
+        <TabsContent value="overview">
+          <Skeleton className="h-64 w-full" />
+        </TabsContent>
+      </Tabs>
+    );
+  }
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
       <TabsList className="relative grid grid-cols-4 gap-4 w-3xl right-0 ">
