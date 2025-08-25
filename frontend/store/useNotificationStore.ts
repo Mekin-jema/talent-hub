@@ -6,7 +6,7 @@ import { handleError } from '@/lib/error-handler';
 import { useAuthStore } from './useAuthStore';
 import { toast } from 'sonner';
 
-const API_BASE_URL = process.env.BACKEND_API_URL || 'http://localhost:5000/api/v1';
+const API_BASE_URL = process.env.BACKEND_API_URL || 'https://talent-hub-129b.onrender.com/api/v1';
 const NOTIFICATIONS_API_URL = `${API_BASE_URL}/notifications`;
 
 export interface Notification {

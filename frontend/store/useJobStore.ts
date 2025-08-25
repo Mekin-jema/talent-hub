@@ -7,7 +7,7 @@ import { JobFormValues } from '@/validation/job.validation';
 import { useAuthStore } from './useAuthStore';
 import { Job } from '@/types';
 
-const API_BASE_URL = process.env.BACKEND_API_URL || 'http://localhost:5000/api/v1';
+const API_BASE_URL = process.env.BACKEND_API_URL || 'https://talent-hub-129b.onrender.com/api/v1';
 const JOBS_API_URL = `${API_BASE_URL}/jobs`;
 
 interface JobStoreState {
