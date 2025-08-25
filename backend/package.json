@@ -3,21 +3,23 @@
   "version": "1.0.0",
   "description": "Backend for TalentHub job portal",
   "main": "src/index.js",
-  "scripts": {
-    "dev": "nodemon index.js",
-    "start": "node index.js",
-    "db:generate": "npx prisma generate",
-    "db:push": "npx prisma db push",
-    "db:studio": "npx prisma studio",
-    "db:migrate": "npx prisma migrate dev --name init",
-    "docker:build": "docker-compose build",
-    "docker:up": "docker-compose up",
-    "docker:down": "docker-compose down",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "seed": "prisma db seed"
-  },
+"scripts": {
+  "dev": "nodemon src/index.js",
+  "start": "node src/index.js",
+  "build": "echo 'No build step for JS, ready to run'", 
+  "db:generate": "npx prisma generate",
+  "db:push": "npx prisma db push",
+  "db:studio": "npx prisma studio",
+  "db:migrate": "npx prisma migrate dev --name init",
+  "docker:build": "docker-compose build",
+  "docker:up": "docker-compose up",
+  "docker:down": "docker-compose down",
+  "test": "jest",
+  "test:watch": "jest --watch",
+  "test:coverage": "jest --coverage",
+  "seed": "prisma db seed"
+},
+
   "prisma": {
     "seed": "node prisma/seed.js"
   },

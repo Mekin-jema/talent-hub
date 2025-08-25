@@ -1,4 +1,3 @@
-# Dockerfile
 FROM node:18-alpine
 
 WORKDIR /app
@@ -7,7 +6,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install --production
 
 # Copy Prisma schema
 COPY prisma ./prisma/
@@ -21,5 +20,5 @@ COPY . .
 # Expose port
 EXPOSE 5000
 
-# Start the application
-CMD ["npm", "run", "dev"]
+# Default command: start server (production mode)
+CMD ["npm", "run", "start"]
