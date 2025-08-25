@@ -5,11 +5,12 @@ import { Badge } from '../ui/badge';
 import { Application } from '@/store/useApplicationStore';
 import { Job } from '@/types';
 
-interface Notification {
+export interface Notification {
   id: string;
   message: string;
   isRead: boolean;
   createdAt: string;
+  type: string;
 }
 
 interface StatsOverviewProps {

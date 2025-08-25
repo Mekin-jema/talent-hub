@@ -1,9 +1,10 @@
 // components/employer/NotificationPanel.tsx
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Notification } from './StatsOverview';
 
 interface NotificationPanelProps {
-  notifications: any[];
+  notifications: Notification[];
 }
 
 const NotificationPanel = ({ notifications }: NotificationPanelProps) => {

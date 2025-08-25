@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Job } from '@/types';
+import { Job, Skill } from '@/types';
 
 interface JobsManagerProps {
   jobs: Job[];
@@ -64,14 +64,8 @@ const JobsManager = ({ jobs, selectedJobId, onSelectJob }: JobsManagerProps) => 
             <p className="mb-4">{selectedJob.description}</p>
 
             <div className="flex flex-wrap gap-2 mb-4">
-              {selectedJob.skills?.map((skill, idx) => (
-                <Badge key={idx} variant="secondary">
-                  {typeof skill === 'string'
-                    ? skill
-                    : (skill && typeof skill === 'object' && 'name' in skill)
-                      ? (skill as any).name
-                      : String(skill)}
-                </Badge>
+              {selectedJob.skills?.map((skill: Skill) => (
+                <Badge key={skill.id.toString()} variant="secondary">{skill.name}</Badge>
               ))}
             </div>
 
