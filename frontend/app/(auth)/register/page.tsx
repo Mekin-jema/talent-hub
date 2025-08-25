@@ -16,11 +16,14 @@ import { GoogleIcon } from "@/components/icons/GoogleIcon";
 import { GithubIcon } from "@/components/icons/GithubIcon";
 import Image from "next/image";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useRouter } from "next/navigation";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function SignupPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGithubPending, startGithubTransition] = useTransition();
   const [isGooglePending, startGoogleTransition] = useTransition();
+  const router = useRouter();
 
   const form = useForm<SignupFormType>({
     resolver: zodResolver(signupSchema),
@@ -30,7 +33,6 @@ export default function SignupPage() {
       password: "",
     },
   });
-
   // auth sore
   const {signup}=useAuthStore()
 
@@ -56,6 +58,8 @@ export default function SignupPage() {
      if(result?.message){
 
       form.reset();
+          toast.success("Account created successfully!");
+        router.push("/login");
      }
     } catch (error) {
       console.error(error)
@@ -140,6 +144,25 @@ export default function SignupPage() {
                   placeholder="At least 8 characters"
                   showPasswordToggle
                 />
+              </div>
+
+              {/* Role Select */}
+              <div className="space-y-0.5">
+                <Label htmlFor="role" className="text-sm">
+                  I am a
+                </Label>
+                <Select
+                  onValueChange={(value) => form.setValue("role", value as SignupFormType["role"])}
+                  defaultValue={form.getValues("role")}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select your role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="DEVELOPER">Developer</SelectItem>
+                    <SelectItem value="EMPLOYER">Employer</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               <Button type="submit" disabled={isLoading} className="w-full dark:text-white">

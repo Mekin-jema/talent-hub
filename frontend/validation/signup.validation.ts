@@ -34,6 +34,7 @@ export const signupSchema = z.object({
     .string()
     .nonempty({ message: errorMessages.password.required })
     .regex(strongPasswordRegex, { message: errorMessages.password.regex }),
+  role: z.enum(["DEVELOPER", "EMPLOYER"]),
 });
 
 export type SignupFormType = z.infer<typeof signupSchema>;
