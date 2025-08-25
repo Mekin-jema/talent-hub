@@ -34,7 +34,8 @@ model User {
 
   // Relationships
   jobs        Job[]          @relation("JobPoster")  // Jobs created by this user
-  applications Application[]                         // Applications submitted
+  applications Application[] 
+  notifications Notification[]                        // Applications submitted
 
   @@map("users")  // Map to "users" table
 }
@@ -64,7 +65,9 @@ model Job {
   skills           Skill[]                           // Required skills
   createdBy        User      @relation("JobPoster", fields: [userId], references: [id])  
   userId           String                             // Employer who created the job
-  applications     Application[]                      // Applications for this job
+  applications     Application[]       
+                 // Applications for this job
+  
 
   @@map("jobs")  // Map to "jobs" table
 }
@@ -84,6 +87,8 @@ model Application {
   noticePeriod String?  @default("")                          // Optional notice period
 
   // Relationships
+  // 🔔 NEW
+  notifications    Notification[]   // All notifications for this job
   job         Job      @relation(fields: [jobId], references: [id])   // Job applied for
   jobId       String
   applicant   User     @relation(fields: [userId], references: [id])  // Applicant (User)
@@ -102,6 +107,38 @@ model Skill {
   name   String                         // Skill name (e.g. React, Node.js)
   jobId  String                         // The job this skill belongs to
   job    Job @relation(fields: [jobId], references: [id])
+}
+
+// ============================================================
+// 🔔 NOTIFICATION MODEL
+// Stores real-time notifications for employers (and later admins/users)
+// ============================================================
+model Notification {
+  id          String   @id @default(cuid())          // Unique notification ID
+  message     String                                // Notification message
+  type        NotificationType @default(APPLICATION) // Notification type (Application, System, etc.)
+  isRead      Boolean  @default(false)              // Whether the notification is read
+  createdAt   DateTime @default(now())              // Timestamp for notification
+
+  // Relationships
+  user        User     @relation(fields: [userId], references: [id]) // Who receives the notification (Employer)
+  userId      String
+
+  jobId       String?
+
+  application Application? @relation(fields: [applicationId], references: [id]) // Optional: related application
+  applicationId String?
+
+  @@map("notifications")
+}
+
+// ============================================================
+// 📌 ENUMS for Notifications
+// ============================================================
+enum NotificationType {
+  APPLICATION    // New application submitted
+  SYSTEM         // System message / updates
+  MESSAGE        // Direct messages / chat (future use)
 }
 
 // ============================================================

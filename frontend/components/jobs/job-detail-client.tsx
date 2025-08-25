@@ -11,6 +11,7 @@ import {
   JobDetailSidebar,
 } from "@/components/applications";
 import { useJobStore } from "@/store/useJobStore";
+import { toast } from "sonner";
 
 export default function JobDetailClient({ id }: { id: string }) {
   const router = useRouter();
@@ -19,6 +20,7 @@ export default function JobDetailClient({ id }: { id: string }) {
   const [applicationFormOpen, setApplicationFormOpen] = useState(false);
   const [applicationStep, setApplicationStep] = useState(1);
   const [resume, setResume] = useState<File | null>(null);
+  console.log(resume)
 
   const { currentJob, getJobById, loading} = useJobStore();
   
@@ -65,7 +67,24 @@ export default function JobDetailClient({ id }: { id: string }) {
     }
   };
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) setResume(e.target.files[0]);
+    // if (e.target.files && e.target.files[0]) setResume(e.target.files[0]);
+      const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    if (!validTypes.includes(file.type)) {
+      toast.error("Please upload a PDF, DOC, or DOCX file");
+      return;
+    }
+
+    // Validate file size (5MB max)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("File size must be less than 5MB");
+      return;
+    }
+
+    setResume(file);
   };
   const handleCloseForm = () => {
     setApplicationFormOpen(false);

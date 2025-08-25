@@ -12,6 +12,7 @@ import { Loader2, CheckCircle, Upload } from "lucide-react";
 import { applicationFormSchema, ApplicationFormValues } from "@/validation/application.validation";
 import { useApplicationStore } from "@/store/useApplicationStore";
 import { Job } from "@/types";
+import { uploadFileToCloudinary } from "@/lib/cloudinary";
 
 
 interface ApplicationDialogProps {
@@ -64,6 +65,14 @@ export function ApplicationDialog({
   });
 
   const onSubmit = async (data: ApplicationFormValues) => {
+          // const resumeUrl = await uploadFileToCloudinary(resume);
+      
+      // Update form data with resume URL
+      // const applicationData = {
+      //   ...data,
+      //   resumeUrl,
+      
+      // };
     applyForJob(data,job.id)
 
     setIsSubmitting(true);

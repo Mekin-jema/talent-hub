@@ -17,7 +17,8 @@ export const applicationFormSchema = z.object({
   coverLetter: z.string().optional(),
   salaryExpectation: z.string().optional(),
   noticePeriod: z.string().optional(),
-  source: z.string().optional()
+  source: z.string().optional(),
+  resumeUrl: z.string().url("Invalid URL").optional()
   // noticePeriod: z.enum([
   //   "immediately",
   //   "1week",
