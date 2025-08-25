@@ -8,30 +8,47 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useJobStore } from '@/store/useJobStore';
 import { Application, useApplicationStore } from '@/store/useApplicationStore';
+import { Notification } from '@/components/employer/StatsOverview';
+import { Job } from '@/types';
 
-// Types (simplified)
-interface Job {
-  id: string;
-  title: string;
-  companyName: string;
-  type: string;
-  location: string;
-  posted: string;
-  applications: number;
-  status: 'active' | 'closed' | 'draft';
-}
 
-// interface Application {
-//   id: string;
-//   jobId: string;
-//   jobTitle: string;
-//   applicantName: string;
-//   applicantEmail: string;
-//   appliedDate: string;
-//   status: 'applied' | 'shortlisted' | 'rejected' | 'interview';
-//   resumeUrl: string;
-//   coverLetter: string;
-// }
+export const mockNotifications: Notification[] = [
+  {
+    id: "1",
+    message: "Your job application has been submitted successfully.",
+    isRead: false,
+    createdAt: "2025-08-25T09:15:00Z",
+    type: "APPLICATION",
+  },
+  {
+    id: "2",
+    message: "A new job matching your profile has been posted.",
+    isRead: true,
+    createdAt: "2025-08-24T14:30:00Z",
+    type: "JOB_ALERT",
+  },
+  {
+    id: "3",
+    message: "Your application has been shortlisted. Congrats!",
+    isRead: false,
+    createdAt: "2025-08-23T16:45:00Z",
+    type: "STATUS_UPDATE",
+  },
+  {
+    id: "4",
+    message: "Reminder: Your interview is scheduled for tomorrow at 10 AM.",
+    isRead: false,
+    createdAt: "2025-08-22T18:00:00Z",
+    type: "REMINDER",
+  },
+  {
+    id: "5",
+    message: "New message from employer regarding your application.",
+    isRead: true,
+    createdAt: "2025-08-21T11:20:00Z",
+    type: "MESSAGE",
+  },
+];
 
 const EmployerDashboard = () => {
   const { user } = useAuthStore();
@@ -62,18 +79,38 @@ const EmployerDashboard = () => {
   );
 
   // Transform jobs
-  const transformedJobs: Job[] = employerJobs.map(job => ({
-    id: job.id,
-    title: job.title,
-    companyName: job.companyName || 'Private Company',
-    type: job.type || 'Full-time',
-    location: job.location || 'Remote',
-    posted: job.posted
-      ? new Date(job.posted).toISOString().split('T')[0]
-      : new Date().toISOString().split('T')[0],
-    applications: job._count?.applications || 0,
-    status: job.featured ? 'active' : 'draft',
-  }));
+ const transformedJobs: Job[] = employerJobs.map(job => ({
+  id: job.id,
+  title: job.title,
+  companyName: job.companyName || 'Private Company',
+  type: job.type || 'Full-time',
+  location: job.location || 'Remote',
+  posted: job.posted
+    ? new Date(job.posted).toISOString().split('T')[0]
+    : new Date().toISOString().split('T')[0],
+  updatedAt: new Date().toISOString().split('T')[0],
+  applications: job.applications || [],
+  _count: job._count || { applications: 0 },
+  // status: job.featured ? status.OPEN : status.CLOSED,
+
+  // required fields with safe defaults
+  description: job.description || "",
+  requirements: job.requirements || [],
+  responsibilities: job.responsibilities || [],
+  aboutCompany: job.aboutCompany || "",
+  logo: job.logo || "",
+  salary: job.salary || "",
+  category: job.category || "",
+  featured: job.featured || false,
+  skills: job.skills || [],
+  userId: job.userId || "",
+  createdBy: job.createdBy || {
+    id: "",
+    fullName: "",
+    email: "",
+  },
+}));
+
 
   // Filter applications that belong only to this employer’s jobs
   const employerApplications = useMemo(
@@ -131,7 +168,7 @@ const EmployerDashboard = () => {
       <DashboardTabs
         jobs={transformedJobs}
         applications={transformedApplications}
-        notifications={[]} // add real notifications later
+        notifications={mockNotifications}
         stats={stats}
         loading={appsLoading}
       />

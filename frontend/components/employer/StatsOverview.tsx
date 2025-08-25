@@ -10,7 +10,7 @@ export interface Notification {
   message: string;
   isRead: boolean;
   createdAt: string;
-  type: string;
+  type?: string;
 }
 
 interface StatsOverviewProps {

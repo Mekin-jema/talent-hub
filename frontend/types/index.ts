@@ -33,7 +33,7 @@ export interface Job {
     applications: number;
   };
   applications: Application[];
-  status: JobStatus;
+  status?: JobStatus;
 
 
 
