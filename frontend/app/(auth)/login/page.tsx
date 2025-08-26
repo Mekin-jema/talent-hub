@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import React, {useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -19,13 +19,12 @@ import { useRouter } from "next/navigation";
 import NotFound from "@/app/not-found";
 
 export default function LoginPage() {
-  const [isLoading, setIsLoading] = useState(false);
   const [isGithubPending, startGithubTransition] = useTransition();
   const [isGooglePending, startGoogleTransition] = useTransition();
   const router = useRouter();
 
   // import user store
-  const {login,user} = useAuthStore();
+  const {login,user,loading} = useAuthStore();
   console.log("Login page user:", user);
 
   const form = useForm<loginFormType>({
@@ -69,8 +68,6 @@ export default function LoginPage() {
     } catch (error) {
       console.error("Login error:", error);
       // toast.error("Unexpected error occurred");
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -156,10 +153,10 @@ export default function LoginPage() {
 
               <Button
                 type="submit"
-                disabled={isLoading}
-                className="w-full cursor-pointer dark:text-white"
+                disabled={loading}
+                className="w-full cursor-pointer "
               >
-                {isLoading ? "Logging in..." : "Sign In"}
+                {loading ? "Logging in..." : "Sign In"}
               </Button>
             </div>
           </div>

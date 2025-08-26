@@ -165,7 +165,7 @@ export default function SignupPage() {
                 </Select>
               </div>
 
-              <Button type="submit" disabled={isLoading} className="w-full dark:text-white">
+              <Button type="submit" disabled={isLoading} className="w-full ">
                 {isLoading ? "Signing up..." : "Sign Up"}
               </Button>
             </div>

@@ -487,7 +487,7 @@ const Hero = ({
               <div className="space-y-2">
                 <Link href="/jobs" className="block text-muted-foreground hover:text-primary transition-colors">Browse Jobs</Link>
                 <Link href="/companies" className="block text-muted-foreground hover:text-primary transition-colors">Companies</Link>
-                <Link href="/post-job" className="block text-muted-foreground hover:text-primary transition-colors">Post a Job</Link>
+                <Link href="/post-job" className="block text-muted-foreground transition-colors">Post a Job</Link>
                 <Link href="/career-advice" className="block text-muted-foreground hover:text-primary transition-colors">Career Advice</Link>
               </div>
             </div>

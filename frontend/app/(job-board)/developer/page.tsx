@@ -1,6 +1,6 @@
 "use client"
 import { useApplicationStore } from '@/store/useApplicationStore'
-import { Loader, Calendar, Building2, MapPin, Clock, CheckCircle, XCircle, Clock4, UserCheck, Circle, Filter, Search, FileText, ChevronDown, ChevronUp, BarChart3 } from 'lucide-react'
+import { Loader, Calendar, Building2, MapPin, Clock, CheckCircle, XCircle, Clock4, UserCheck, Circle, Filter, Search, FileText, ChevronDown, ChevronUp, BarChart3, ArrowRight } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 
 // Status badge component to show application status with appropriate styling
@@ -325,14 +325,16 @@ const DeveloperDashboard = () => {
     </div>
 
     {/* Apply More Button */}
-    <div className="mt-6 flex justify-center">
-      <button
-        onClick={() => window.location.href = '/jobs'}
-        className="px-6 py-2 rounded-lg bg-primary text-white hover:bg-primary/80 transition"
-      >
-        Apply More
-      </button>
-    </div>
+<div className="mt-6 flex justify-center">
+  <button
+    onClick={() => window.location.href = '/jobs'}
+    className="px-6 py-2 rounded-lg bg-primary text-black dark:text-black hover:bg-primary/80 transition flex items-center"
+  >
+    Apply More
+    <ArrowRight size={16} className="ml-1" />
+  </button>
+</div>
+
   </>
 )}
 

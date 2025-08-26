@@ -1,0 +1,218 @@
+### --------------------------
+### TALENTHUB API DOCUMENTATION
+### --------------------------
+
+### Variables
+@baseUrl = http://localhost:5000
+@apiVersion = v1
+@apiRoot = {{baseUrl}}/api/{{apiVersion}}
+
+### Test User Credentials
+@adminEmail = admin@example.com
+@adminPassword = admin123
+@employerEmail = employer@example.com
+@employerPassword = employer123
+@developerEmail = developer@example.com
+@developerPassword = developer123
+
+### --------------------------
+### 1. AUTHENTICATION ENDPOINTS
+### --------------------------
+
+### Register a new user
+# @name register
+POST {{apiRoot}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "{{developerEmail}}",
+  "password": "{{developerPassword}}",
+  "fullName": "John Developer",
+  "role": "DEVELOPER"
+}
+
+### Login user
+# @name login
+POST {{apiRoot}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{developerEmail}}",
+  "password": "{{developerPassword}}"
+}
+
+### Save token from login
+@authToken = {{login.response.body.data.token}}
+
+### Get current user profile
+GET {{apiRoot}}/auth/me
+Authorization: Bearer {{authToken}}
+
+### Logout user
+POST {{apiRoot}}/auth/logout
+Authorization: Bearer {{authToken}}
+
+### --------------------------
+### 2. JOBS ENDPOINTS
+### --------------------------
+
+### Get all jobs (public)
+GET {{apiRoot}}/jobs
+Content-Type: application/json
+
+### Get all jobs with pagination
+GET {{apiRoot}}/jobs?page=1&limit=5
+Content-Type: application/json
+
+### Get single job by ID
+GET {{apiRoot}}/jobs/{{jobId}}
+Content-Type: application/json
+
+### Create a new job (employer/admin only)
+# @name createJob
+POST {{apiRoot}}/jobs
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "title": "Senior Full Stack Developer",
+  "type": "FULL_TIME",
+  "description": "We are looking for an experienced developer...",
+  "requirements": ["React", "Node.js", "PostgreSQL"],
+  "responsibilities": ["Develop new features", "Code reviews"],
+  "location": "Remote",
+  "aboutCompany": "We are a leading tech company...",
+  "logo": "https://example.com/logo.png",
+  "salary": "$80,000 - $120,000",
+  "category": "Software Development",
+  "featured": true,
+  "skills": ["JavaScript", "React", "Node.js"]
+}
+
+### Save job ID from creation
+@jobId = {{createJob.response.body.data.id}}
+
+### Update a job (owner or admin only)
+PUT {{apiRoot}}/jobs/{{jobId}}
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "title": "Updated Job Title",
+  "description": "Updated job description..."
+}
+
+### Delete a job (owner or admin only)
+DELETE {{apiRoot}}/jobs/{{jobId}}
+Authorization: Bearer {{authToken}}
+
+### --------------------------
+### 3. APPLICATIONS ENDPOINTS
+### --------------------------
+
+### Apply for a job (developer only)
+# @name applyForJob
+POST {{apiRoot}}/applications/apply
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "id": "{{jobId}}",
+  "data": {
+    "coverLetter": "I'm excited to apply for this position...",
+    "salaryExpectation": "$90,000",
+    "noticePeriod": "2 weeks",
+    "resumeUrl": "https://example.com/resume.pdf"
+  }
+}
+
+### Save application ID from response
+@applicationId = {{applyForJob.response.body.data.id}}
+
+### Get all applications (admin only)
+GET {{apiRoot}}/applications
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+### Get user's applications
+GET {{apiRoot}}/applications/my-applications
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+### Get applications for a specific job
+GET {{apiRoot}}/applications/job/{{jobId}}
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+### Update application status
+PATCH {{apiRoot}}/applications/{{applicationId}}/status
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "status": "UNDER_REVIEW"
+}
+
+### --------------------------
+### 4. NOTIFICATIONS ENDPOINTS
+### --------------------------
+
+### Get user notifications
+# @name getNotifications
+GET {{apiRoot}}/notifications
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+# After running the request above, replace the placeholder below with an actual notification id from the response
+@notificationId = REPLACE_WITH_NOTIFICATION_ID
+
+### Mark notification as read
+PATCH {{apiRoot}}/notifications/{{notificationId}}/read
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+### Mark all notifications as read
+PATCH {{apiRoot}}/notifications/read-all
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+### Clear all notifications
+DELETE {{apiRoot}}/notifications
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+### --------------------------
+### 5. SYSTEM ENDPOINTS
+### --------------------------
+
+### Health check
+GET {{baseUrl}}/api/health
+Content-Type: application/json
+
+### API information
+GET {{baseUrl}}/api
+Content-Type: application/json
+
+### --------------------------
+### 6. TEST SCENARIOS
+### --------------------------
+
+### Scenario 1: Complete job application flow
+# 1. Register a developer
+# 2. Login to get token
+# 3. Browse available jobs
+# 4. Apply for a job
+# 5. Check application status
+
+### Scenario 2: Employer posting a job
+# 1. Register as employer
+# 2. Login to get token
+# 3. Create a new job posting
+# 4. View applications for the job
+# 5. Update application statuses
+
+### Scenario 3: Admin monitoring
+# 1. Login as admin
+# 2. View all jobs
+# 3. View all applications
+# 4. Manage system content
