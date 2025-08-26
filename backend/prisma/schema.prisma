@@ -11,9 +11,10 @@ generator client {
 
 // 💾 Database Configuration
 datasource db {
-  provider = "sqlite"         // Using SQLite (good for dev/testing)
-  url      = "file:./job.db"  // Database file location
+  provider = "postgresql"             // ✅ use Postgres in Render
+  url      = env("DATABASE_URL")      // ✅ read from environment variable
 }
+
 
 // ============================================================
 // 👤 USER MODEL
