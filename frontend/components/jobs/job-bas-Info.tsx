@@ -34,7 +34,7 @@ export default function JobBasicInfo({ register, errors, setValue }: JobBasicInf
           <SelectTrigger>
             <SelectValue placeholder="Select job type" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent align="center" className="bg-[#E8F0FE]">
             {jobTypes.map((type) => (
               <SelectItem key={type} value={type}>
                 {type}
@@ -71,7 +71,7 @@ export default function JobBasicInfo({ register, errors, setValue }: JobBasicInf
           <SelectTrigger>
             <SelectValue placeholder="Select category" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent align="center" className="bg-[#E8F0FE]">
             {categories.map((category) => (
               <SelectItem key={category} value={category}>
                 {category}

@@ -12,6 +12,8 @@ import JobResponsibilities from "./job-responsibilities";
 import JobSkills from "./job-skills";
 import JobFeatured from "./job-featured";
 import { useJobStore } from "@/store/useJobStore";
+import { Router } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function CreateJobForm() {
   const [skillInput, setSkillInput] = useState("");
@@ -41,6 +43,8 @@ export default function CreateJobForm() {
       logo: "",
     },
   });
+
+  const router = useRouter();
 
   const requirements = watch("requirements") ?? [];
   const responsibilities = watch("responsibilities") ?? [];
@@ -100,6 +104,7 @@ export default function CreateJobForm() {
     // Call the createJob function from the job store
     createJob(data);
     reset();
+    router.push("/employer");
   };
 
   return (
@@ -150,6 +155,7 @@ export default function CreateJobForm() {
       />
 
       <Button type="submit" className="w-full">
+
         Create Job Posting
       </Button>
     </form>

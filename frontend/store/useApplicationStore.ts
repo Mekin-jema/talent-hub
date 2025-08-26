@@ -5,8 +5,10 @@ import { toast } from 'sonner';
 import { handleError } from '@/lib/error-handler';
 import { useAuthStore } from './useAuthStore';
 import { ApplicationFormValues } from '@/validation/application.validation';
+import { Job } from '@/types';
 
-const API_BASE_URL = process.env.BACKEND_API_URL || 'https://talent-hub-1-91qb.onrender.com/api/v1';
+// const API_BASE_URL = process.env.BACKEND_API_URL || 'https://talent-hub-1-91qb.onrender.com/api/v1';
+const API_BASE_URL = 'http://localhost:5000/api/v1';
 const APPLICATIONS_API_URL = `${API_BASE_URL}/applications`;
 
 
@@ -18,34 +20,36 @@ export interface Application {
   resumeUrl?: string | null;
   coverLetter?: string | null;
   extraData?: Record<string, any>;
-  job: {
-    id: string;
-    title: string;
-    createdBy: { id: string; fullName: string; email: string };
-  };
+  job: Job;
   applicant: { id: string; fullName: string; email: string };
+  salaryExpectation?: string;                   // Optional salary expectation
+  noticePeriod?: string;                          // Optional notice period
+
+  
 }
 
 interface ApplicationStoreState {
   applications: Application[];
+  userApplications: Application[]; // NEW: for logged-in user's apps
   currentApplication: Application | null;
   loading: boolean;
   error: string | null;
-  appliedJobs: Record<string, boolean>; // NEW: jobId => true if applied
+  appliedJobs: Record<string, boolean>;
 
   applyForJob: (data: ApplicationFormValues, id: string) => Promise<Application>;
-  fetchUserApplications: (userId: string) => Promise<void>;
+  fetchUserApplications: () => Promise<void>;
   fetchJobApplications: (jobId: string) => Promise<void>;
   updateApplicationStatus: (id: string, status: string) => Promise<Application>;
-  checkIfApplied: (jobId: string) => boolean; // NEW: check applied status
+  checkIfApplied: (jobId: string) => boolean;
 }
 
 export const useApplicationStore = create<ApplicationStoreState>()(
   persist(
     (set, get) => ({
       applications: [],
+      userApplications: [], // NEW
       currentApplication: null,
-      appliedJobs: {}, // NEW
+      appliedJobs: {},
       loading: false,
       error: null,
 
@@ -61,7 +65,7 @@ export const useApplicationStore = create<ApplicationStoreState>()(
 
           set((state) => ({
             applications: [res.data.data, ...state.applications],
-            appliedJobs: { ...state.appliedJobs, [id]: true }, // mark job as applied
+            appliedJobs: { ...state.appliedJobs, [id]: true },
           }));
 
           toast.success('Application submitted successfully');
@@ -74,13 +78,15 @@ export const useApplicationStore = create<ApplicationStoreState>()(
         }
       },
 
-      fetchUserApplications: async (userId) => {
+      fetchUserApplications: async () => {
         try {
           set({ loading: true });
           const { user } = useAuthStore.getState();
           if (!user?.token) throw new Error('You must be logged in');
+          console.log('User in applyForJob:', user);
 
-          const res = await axios.get(`${APPLICATIONS_API_URL}/user/${userId}`, {
+
+          const res = await axios.get(`${APPLICATIONS_API_URL}/my-applications`, {
             headers: { Authorization: `Bearer ${user.token}` },
           });
 
@@ -93,8 +99,8 @@ export const useApplicationStore = create<ApplicationStoreState>()(
           );
 
           set({
-            applications: res.data.data,
-            appliedJobs: appliedJobsMap, // update appliedJobs
+            userApplications: res.data.data, // store in userApplications
+            appliedJobs: appliedJobsMap,
           });
         } catch (err) {
           handleError(err, 'Failed to fetch user applications');
@@ -139,6 +145,9 @@ export const useApplicationStore = create<ApplicationStoreState>()(
             applications: state.applications.map((app) =>
               app.id === id ? res.data.data : app
             ),
+            userApplications: state.userApplications.map((app) =>
+              app.id === id ? res.data.data : app
+            ),
           }));
 
           toast.success('Application status updated successfully');
@@ -151,7 +160,6 @@ export const useApplicationStore = create<ApplicationStoreState>()(
         }
       },
 
-      // NEW: helper to check if user applied to a job
       checkIfApplied: (jobId) => {
         const { appliedJobs } = get();
         return !!appliedJobs[jobId];
@@ -162,8 +170,9 @@ export const useApplicationStore = create<ApplicationStoreState>()(
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         applications: state.applications,
+        userApplications: state.userApplications, // persist userApplications
         currentApplication: state.currentApplication,
-        appliedJobs: state.appliedJobs, // persist applied jobs
+        appliedJobs: state.appliedJobs,
       }),
     }
   )

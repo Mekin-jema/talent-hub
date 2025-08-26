@@ -10,8 +10,11 @@ router.post('/apply', authenticateToken,
     // requireRole(Role.DEVELOPER), 
     asyncHandler(applicationController.applyForJob));
 router.get('/', authenticateToken, requireRole(Role.ADMIN), asyncHandler(applicationController.getAllApplications));
-router.get('/user/:userId', authenticateToken, asyncHandler(applicationController.getUserApplications));
+router.get('/my-applications',
+     authenticateToken,
+      asyncHandler(applicationController.getUserApplications));
+
 router.get('/job/:jobId', authenticateToken, asyncHandler(applicationController.getJobApplications));
-router.put('/:id/status', authenticateToken, asyncHandler(applicationController.updateApplicationStatus));
+router.patch('/:id/status', authenticateToken, asyncHandler(applicationController.updateApplicationStatus));
 
 module.exports = router;

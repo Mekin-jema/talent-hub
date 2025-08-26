@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useApplicationStore } from "@/store/useApplicationStore";
+import { useAuthStore } from "@/store/useAuthStore";
 import { Job } from "@/types";
 import { formatDistanceToNow } from "date-fns";
 
@@ -13,7 +14,12 @@ interface JobDetailSidebarProps {
 
 export function JobDetailSidebar({ job, saved, applied, onSave, onApply }: JobDetailSidebarProps) {
   const { checkIfApplied } = useApplicationStore();
+  const { user } = useAuthStore();
 
+  const getButtonLabel = () => {
+    if (!user?.user) return "Login to Apply"; // user not logged in
+    return checkIfApplied(job.id) ? "Applied" : "Apply Now"; // user logged in
+  };
   return (
     <div className="space-y-6">
       {/* Apply Box */}
@@ -30,7 +36,7 @@ export function JobDetailSidebar({ job, saved, applied, onSave, onApply }: JobDe
           onClick={onApply}
           disabled={checkIfApplied(job.id)}
         >
-          {checkIfApplied(job.id) ? "Applied" : "Apply Now"}
+          {getButtonLabel()}
         </Button>
         <Button variant="outline" className="w-full" size="lg" onClick={onSave}>
           {saved ? "Saved" : "Save for Later"}

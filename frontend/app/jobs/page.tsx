@@ -119,15 +119,17 @@ export default function AllJobsPage() {
 
   // Format date function
 
-
-  if (loading) {
-    return (
-      <div className="max-w-7xl mx-auto p-8 text-center">
+if (loading) {
+  return (
+    <div className="flex items-center justify-center h-screen w-full">
+      <div className="text-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-        <p>Loading jobs...</p>
+        <p className="text-gray-700">Loading jobs...</p>
       </div>
-    );
-  }
+    </div>
+  );
+}
+
 
   if (error) {
     return (

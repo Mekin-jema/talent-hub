@@ -7,11 +7,11 @@ import { Badge } from '@/components/ui/badge';
 import { Briefcase, Users, Bell, BarChart3 } from 'lucide-react';
 import StatsOverview from './StatsOverview';
 import JobsManager from './JobsManager';
-import ApplicationManager from './ApplicationManager';
 import NotificationPanel from './NotificationPanel';
 import { Skeleton } from '../ui/skeleton';
 import { Job } from '@/types';
 import { Application } from '@/store/useApplicationStore';
+import ApplicationManager from './ApplicationManager';
 
 
 interface DashboardTabsProps {

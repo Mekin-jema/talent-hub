@@ -68,8 +68,8 @@ exports.getAllApplications = async (req, res) => {
   const [applications, total] = await Promise.all([
     prisma.application.findMany({
       include: {
-        job: { select: { id: true, title: true, createdBy: { select: { id: true, name: true } } } },
-        applicant: { select: { id: true, name: true, email: true } }
+        job: { select: { id: true, title: true, createdBy: { select: { id: true, fullName: true } } } },
+        applicant: { select: { id: true, fullName: true, email: true } }
       },
       orderBy: { createdAt: 'desc' },
       skip,
@@ -87,20 +87,43 @@ exports.getAllApplications = async (req, res) => {
 };
 
 // Get user's applications
+// controller
 exports.getUserApplications = async (req, res) => {
-  const userId = req.params.userId;
+  try {
+    const userId = req.user.id; // get logged-in user id
+    console.log("Fetching applications for user ID:", userId);
 
-  if (req.user.id !== userId && req.user.role !== Role.ADMIN) {
-    return sendErrorResponse(res, 'Not authorized to view these applications', 403);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const [applications, total] = await Promise.all([
+      prisma.application.findMany({
+        where: { userId },
+        include: {
+          job: {
+            include: {
+              createdBy: { select: { id: true, fullName: true, email: true } },
+            },
+          },
+        },
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: limit,
+      }),
+      prisma.application.count({ where: { userId } }),
+    ]);
+
+    sendSuccessResponse(res, 'User applications retrieved successfully', applications, 200, {
+      page,
+      limit,
+      total,
+      pages: Math.ceil(total / limit),
+    });
+  } catch (error) {
+    console.error(error);
+    sendErrorResponse(res, 'Failed to retrieve user applications', 500);
   }
-
-  const applications = await prisma.application.findMany({
-    where: { userId },
-    include: { job: { include: { createdBy: { select: { id: true, name: true, email: true } } } } },
-    orderBy: { createdAt: 'desc' }
-  });
-
-  sendSuccessResponse(res, 'User applications retrieved successfully', applications);
 };
 
 // Get applications for a job
@@ -115,7 +138,7 @@ exports.getJobApplications = async (req, res) => {
 
   const applications = await prisma.application.findMany({
     where: { id },
-    include: { applicant: { select: { id: true, name: true, email: true } } },
+    include: { applicant: { select: { id: true, fullName: true, email: true } } },
     orderBy: { createdAt: 'desc' }
   });
 
@@ -125,6 +148,7 @@ exports.getJobApplications = async (req, res) => {
 // Update application status
 exports.updateApplicationStatus = async (req, res) => {
   const { status } = req.body;
+  console.log("Updating application status:", status);
 
   if (!status || !Object.values(ApplicationStatus).includes(status)) {
     return sendErrorResponse(res, 'Valid status is required', 400);
@@ -144,7 +168,7 @@ exports.updateApplicationStatus = async (req, res) => {
     data: { status },
     include: {
       job: { select: { id: true, title: true } },
-      applicant: { select: { id: true, name: true, email: true } }
+      applicant: { select: { id: true, fullName: true, email: true } }
     }
   });
 
