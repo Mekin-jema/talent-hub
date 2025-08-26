@@ -135,7 +135,7 @@ export const useApplicationStore = create<ApplicationStoreState>()(
           const { user } = useAuthStore.getState();
           if (!user?.token) throw new Error('You must be logged in');
 
-          const res = await axios.put(
+          const res = await axios.patch(
             `${APPLICATIONS_API_URL}/${id}/status`,
             { status },
             { headers: { Authorization: `Bearer ${user.token}` } }

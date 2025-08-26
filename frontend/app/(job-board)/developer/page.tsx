@@ -290,33 +290,53 @@ const DeveloperDashboard = () => {
           </select>
         </div>
       </div>
-
-      {/* Applications List */}
-      {filteredApplications.length === 0 ? (
-        <div className="text-center py-16 bg-card rounded-xl border border-border">
-          <div className="text-muted-foreground mb-4">
-            {filter === 'ALL' ? (
-              <div>
-                <Building2 size={64} className="mx-auto mb-4 opacity-50" />
-                <p className="text-lg font-medium text-card-foreground mb-2">No userApplications yet</p>
-                <p className="text-muted-foreground">Start applying to jobs to track your progress here</p>
-              </div>
-            ) : (
-              <div>
-                <Clock size={64} className="mx-auto mb-4 opacity-50" />
-                <p className="text-lg font-medium text-card-foreground mb-2">No {filter.toLowerCase()} userApplications</p>
-                <p className="text-muted-foreground">You don't have any userApplications with this status</p>
-              </div>
-            )}
-          </div>
+{/* Applications List */}
+{filteredApplications.length === 0 ? (
+  <div className="text-center py-16 bg-card rounded-xl border border-border">
+    <div className="text-muted-foreground mb-4">
+      {filter === 'ALL' ? (
+        <div>
+          <Building2 size={64} className="mx-auto mb-4 opacity-50" />
+          <p className="text-lg font-medium text-card-foreground mb-2">No applications yet</p>
+          <p className="text-muted-foreground">Start applying to jobs below</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-5">
-          {filteredApplications.map((application) => (
-            <ApplicationCard key={application.id} application={application} />
-          ))}
+        <div>
+          <Clock size={64} className="mx-auto mb-4 opacity-50" />
+          <p className="text-lg font-medium text-card-foreground mb-2">No {filter.toLowerCase()} applications</p>
+          <p className="text-muted-foreground">You don't have any applications with this status</p>
         </div>
       )}
+    </div>
+    {/* Apply Button */}
+    <button
+      onClick={() => window.location.href = '/jobs'}
+      className="mt-4 px-6 py-2 rounded-lg bg-primary text-white hover:bg-primary/80 transition"
+    >
+      Apply Here
+    </button>
+  </div>
+) : (
+  <>
+    <div className="grid grid-cols-1 gap-5">
+      {filteredApplications.map((application) => (
+        <ApplicationCard key={application.id} application={application} />
+      ))}
+    </div>
+
+    {/* Apply More Button */}
+    <div className="mt-6 flex justify-center">
+      <button
+        onClick={() => window.location.href = '/jobs'}
+        className="px-6 py-2 rounded-lg bg-primary text-white hover:bg-primary/80 transition"
+      >
+        Apply More
+      </button>
+    </div>
+  </>
+)}
+
+
     </div>
   )
 }

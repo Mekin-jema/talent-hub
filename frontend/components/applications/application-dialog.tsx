@@ -249,7 +249,7 @@ export function ApplicationDialog({
                   <SelectTrigger>
                     <SelectValue placeholder="Select source" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent align="end">
                     <SelectItem value="linkedin">LinkedIn</SelectItem>
                     <SelectItem value="job-board">Job Board</SelectItem>
                     <SelectItem value="company-website">Company Website</SelectItem>
