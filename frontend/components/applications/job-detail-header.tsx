@@ -95,13 +95,13 @@ export function JobDetailHeader({ job, saved, onSave, onShare }: JobDetailHeader
       </div>
 
       {/* Applications Info */}
-      <div className="mt-4 pt-4 border-t flex items-center text-sm text-muted-foreground">
-        <Users className="w-4 h-4 mr-2" />
+      {/* <div className="mt-4 pt-4 border-t flex items-center text-sm text-muted-foreground"> */}
+        {/* <Users className="w-4 h-4 mr-2" />
         <p>
           <span className="font-medium text-foreground">{job._count.applications}</span>{" "}
           {job._count.applications === 1 ? "person has" : "people have"} applied for this job
-        </p>
-      </div>
+        </p> */}
+      {/* </div> */}
     </div>
   );
 }
