@@ -90,7 +90,7 @@ const Hero = ({
   description = "Discover thousands of job opportunities from top companies. Whether you're a developer, designer, or product manager, we've got the perfect role for you.",
   buttons = {
     primary: { text: "Browse All Jobs", url: "/jobs" },
-    secondary: { text: "Post a Job", url: "/employer/post-job" },
+    secondary: { text: "Post a Job", url: "/jobs/create" },
   },
   featuredJobs = [
     {
@@ -168,8 +168,6 @@ const Hero = ({
 
   const navLinks = [
     { href: "/jobs", label: "Browse Jobs" },
-    { href: "/companies", label: "Companies" },
-    { href: "/jobs/create", label: "Post a Job" },
   ];
 
 

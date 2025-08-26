@@ -3,12 +3,11 @@ import JobDetailClient from "@/components/jobs/job-detail-client";
 import React from "react";
 
 interface JobPageProps {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }
 
-
 // Server Component
-export default async function JobDetailPage({ params }: JobPageProps) {
-  const { id } = await params;
+export default function JobDetailPage({ params }: JobPageProps) {
+  const { id } = params;
   return <JobDetailClient id={id} />;
 }
