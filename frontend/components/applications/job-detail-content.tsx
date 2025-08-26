@@ -41,18 +41,23 @@ export function JobDetailContent({ job }: JobDetailContentProps) {
           ))}
         </ul>
       </div>
+{/* Skills */}
+<div className="bg-card rounded-lg p-6 shadow-sm border">
+  <h2 className="text-xl font-semibold mb-4">Skills Required</h2>
+  <div className="flex flex-wrap gap-2">
+    {job?.skills?.length > 0 ? (
+      job.skills.map((skill) => (
+        <Badge key={String(skill.id)} variant="secondary" className="text-sm">
+          {skill.name}
+        </Badge>
+      ))
+    ) : (
+      <p className="text-gray-500 text-sm">No skills listed</p>
+    )}
+  </div>
+</div>
 
-      {/* Skills */}
-      <div className="bg-card rounded-lg p-6 shadow-sm border">
-        <h2 className="text-xl font-semibold mb-4">Skills Required</h2>
-        <div className="flex flex-wrap gap-2">
-          {job.skills.map((skill) => (
-            <Badge key={String(skill.id)} variant="secondary" className="text-sm">
-              {skill.name}
-            </Badge>
-          ))}
-        </div>
-      </div>
+
     </div>
   );
 }
