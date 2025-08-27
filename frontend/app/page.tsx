@@ -1,29 +1,32 @@
 "use client";
 
+import * as React from "react";
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  ArrowRight,
-  ArrowUpRight,
-  MapPin,
-  Building2,
-  DollarSign,
-  Clock,
-  Star,
-  Quote,
-  LogIn,
-  UserPlus,
-  X,
-  Search,
-  Facebook,
-  Twitter,
-  Instagram,
-  Mail,
-  Phone,
-  Heart,
-  LinkedinIcon,
-  Menu
+import Image from "next/image";
+
+import { 
+  ArrowRight, 
+  ArrowUpRight, 
+  MapPin, 
+  Building2, 
+  DollarSign, 
+  Clock, 
+  Star, 
+  Quote, 
+  LogIn, 
+  UserPlus, 
+  X, 
+  Search, 
+  Facebook, 
+  Twitter, 
+  Instagram, 
+  Mail, 
+  Phone, 
+  Heart, 
+  LinkedinIcon, 
+  Menu 
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -31,11 +34,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
-
-import { cn } from "@/lib/utils";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { ModeToggle } from "@/components/ui/mode-toggle";
-import Image from "next/image";
+import { cn } from "@/lib/utils";
 import Squares from "@/components/animations/square";
+import { TestimonialsSection } from "@/components/blocks/testimonials-with-marquee";
 
 // =======================
 // Interfaces
@@ -53,137 +56,398 @@ interface Job {
   skills: string[];
 }
 
-interface Testimonial {
-  id: string;
-  name: string;
-  role: string;
-  company: string;
-  avatar: string;
-  content: string;
-  rating: number;
-}
-
 interface HeroProps {
   badge?: string;
   heading: string;
   description: string;
   buttons?: {
-    primary?: {
-      text: string;
-      url: string;
-    };
-    secondary?: {
-      text: string;
-      url: string;
-    };
+    primary?: { text: string; url: string };
+    secondary?: { text: string; url: string };
   };
   featuredJobs: Job[];
-  testimonials: Testimonial[];
 }
 
 // =======================
-// Hero Page
+// Mock Data
+// =======================
+const mockFeaturedJobs: Job[] = [
+  {
+    id: "1",
+    title: "Senior Frontend Developer",
+    company: "TechCorp Inc.",
+    location: "San Francisco, CA (Remote)",
+    salary: "$120,000 - $150,000",
+    type: "Full-time",
+    posted: "2 hours ago",
+    logo: "https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=64&h=64&fit=crop&crop=face",
+    featured: true,
+    skills: ["React", "TypeScript", "Next.js", "Tailwind"]
+  },
+  {
+    id: "2",
+    title: "Full Stack Engineer",
+    company: "StartupXYZ",
+    location: "New York, NY",
+    salary: "$100,000 - $130,000",
+    type: "Full-time",
+    posted: "5 hours ago",
+    logo: "https://images.unsplash.com/photo-1569003339405-ea396a5a8a90?w=64&h=64&fit=crop&crop=face",
+    skills: ["Node.js", "React", "MongoDB", "AWS"]
+  },
+  {
+    id: "3",
+    title: "UX/UI Designer",
+    company: "DesignStudio",
+    location: "Austin, TX (Hybrid)",
+    salary: "$85,000 - $110,000",
+    type: "Full-time",
+    posted: "1 day ago",
+    logo: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=64&h=64&fit=crop&crop=face",
+    skills: ["Figma", "Sketch", "Adobe XD", "Prototyping"]
+  },
+  {
+    id: "4",
+    title: "DevOps Engineer",
+    company: "CloudTech Solutions",
+    location: "Remote",
+    salary: "$110,000 - $140,000",
+    type: "Full-time",
+    posted: "3 hours ago",
+    logo: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=64&h=64&fit=crop&crop=face",
+    skills: ["Docker", "Kubernetes", "AWS", "CI/CD"]
+  },
+  {
+    id: "5",
+    title: "Data Scientist",
+    company: "DataInsights Inc.",
+    location: "Boston, MA",
+    salary: "$95,000 - $125,000",
+    type: "Full-time",
+    posted: "6 hours ago",
+    logo: "https://images.unsplash.com/photo-1552058544-f2b08422138a?w=64&h=64&fit=crop&crop=face",
+    skills: ["Python", "Machine Learning", "SQL", "TensorFlow"]
+  },
+  {
+    id: "6",
+    title: "Mobile Developer",
+    company: "AppWorks",
+    location: "Seattle, WA (Hybrid)",
+    salary: "$90,000 - $120,000",
+    type: "Full-time",
+    posted: "4 hours ago",
+    logo: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=64&h=64&fit=crop&crop=face",
+    skills: ["React Native", "iOS", "Android", "JavaScript"]
+  },
+  {
+    id: "7",
+    title: "Backend Developer",
+    company: "API Masters",
+    location: "Remote",
+    salary: "$105,000 - $135,000",
+    type: "Full-time",
+    posted: "Just now",
+    logo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=face",
+    skills: ["Node.js", "PostgreSQL", "GraphQL", "REST APIs"]
+  },
+  {
+    id: "8",
+    title: "Product Manager",
+    company: "InnovateTech",
+    location: "Chicago, IL",
+    salary: "$115,000 - $145,000",
+    type: "Full-time",
+    posted: "1 hour ago",
+    logo: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=64&h=64&fit=crop&crop=face",
+    skills: ["Product Strategy", "Agile", "UX", "Market Research"]
+  }
+];
+
+const testimonials = [
+  {
+    author: {
+      name: "Mekdes Alemu",
+      handle: "@mekdesdev",
+      avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face"
+    },
+    text: "Thanks to this platform, I secured a frontend developer position at a top Addis Ababa startup in just 3 weeks!",
+    href: "https://twitter.com/mekdesdev"
+  },
+  {
+    author: {
+      name: "Abebe Bekele",
+      handle: "@abebebiz",
+      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face"
+    },
+    text: "Our company found highly skilled engineers through this platform, helping us launch our fintech app faster than expected.",
+    href: "https://twitter.com/abebebiz"
+  },
+  {
+    author: {
+      name: "Sahlework Tadesse",
+      handle: "@sahleworkux",
+      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face"
+    },
+    text: "The recommendations were spot-on! I discovered opportunities in Ethiopia's tech ecosystem that I didn't know existed.",
+    href: "https://twitter.com/sahleworkux"
+  },
+  {
+    author: {
+      name: "Yonatan Fikre",
+      handle: "@yonatancode",
+      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face"
+    },
+    text: "Using this platform was a game-changer. I received multiple offers from Ethiopian startups within just a month!",
+    href: "https://twitter.com/yonatancode"
+  },
+  {
+    author: {
+      name: "Eleni Gebre",
+      handle: "@elenimarketing",
+      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
+    },
+    text: "As a hiring manager in Addis Ababa, I can confidently say this platform connects us with top local talent faster than anywhere else.",
+    href: "https://twitter.com/elenimarketing"
+  },
+  {
+    author: {
+      name: "Tesfaye Yohannes",
+      handle: "@tesfayedev",
+      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face"
+    },
+    text: "I was able to join an AI research team in Ethiopia through this platform. It's perfect for tech professionals looking for growth.",
+    href: "https://twitter.com/tesfayedev"
+  },
+  {
+    author: {
+      name: "Meron Desta",
+      handle: "@merondesign",
+      avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face"
+    },
+    text: "The platform's UX/UI role listings helped me land my dream position at a growing Addis Ababa design studio.",
+    href: "https://twitter.com/merondesign"
+  }
+];
+
+
+// =======================
+// Featured Jobs Carousel Component
+// =======================
+interface FeaturedJobsCarouselProps {
+  jobs: Job[];
+}
+
+export function FeaturedJobsCarousel({ jobs }: FeaturedJobsCarouselProps) {
+  return (
+    <div className="w-full max-w-7xl mx-auto px-4">
+      <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center">
+        Latest Job Opportunities
+      </h2>
+      <Carousel className="relative w-full" opts={{ align: "start", loop: true }}>
+        <CarouselContent className="flex gap-3">
+          {jobs.map((job) => (
+            <CarouselItem
+              key={job.id}
+              className="md:basis-1/2 lg:basis-1/3 xl:basis-1/4"
+            >
+              <Card className="overflow-hidden shadow-md hover:shadow-xl border transition-all duration-300 h-full flex flex-col">
+                {/* Logo + Featured Badge */}
+                <div className="flex items-center justify-between p-4 border-b bg-muted/30">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={job.logo}
+                      alt={job.company}
+                      className="h-10 w-10 rounded-md object-contain border bg-white"
+                    />
+                    <div className="flex flex-col">
+                      <span className="font-semibold text-sm">{job.company}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {job.posted}
+                      </span>
+                    </div>
+                  </div>
+                  {job.featured && (
+                    <Badge className="bg-primary/90 text-white text-xs">Featured</Badge>
+                  )}
+                </div>
+
+                {/* Content */}
+                <CardContent className="p-5 flex-1 flex flex-col">
+                  <h3 className="font-semibold text-lg mb-3 line-clamp-1">
+                    {job.title}
+                  </h3>
+
+                  <div className="flex items-center gap-2 mb-2">
+                    <MapPin className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">
+                      {job.location}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2 mb-4">
+                    <DollarSign className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm font-semibold text-green-600">
+                      {job.salary}
+                    </span>
+                  </div>
+
+                  <div className="flex flex-wrap gap-1 mt-auto">
+                    {job.skills.slice(0, 3).map((skill, index) => (
+                      <Badge key={index} variant="outline" className="text-xs">
+                        {skill}
+                      </Badge>
+                    ))}
+                    {job.skills.length > 3 && (
+                      <Badge variant="outline" className="text-xs">
+                        +{job.skills.length - 3} more
+                      </Badge>
+                    )}
+                  </div>
+                </CardContent>
+
+                {/* Footer */}
+                <CardFooter className="flex justify-between items-center p-5 pt-0">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs flex items-center"
+                  >
+                    <Heart className="h-4 w-4 mr-1" /> Save
+                  </Button>
+                  <Button size="sm" className="text-xs flex items-center">
+                    Apply Now <ArrowRight className="h-4 w-4 ml-1" />
+                  </Button>
+                </CardFooter>
+              </Card>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+
+        {/* Navigation arrows */}
+        <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 p-3 bg-background rounded-full shadow-lg border hover:bg-primary hover:text-white transition-all" />
+        <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 p-3 bg-background rounded-full shadow-lg border hover:bg-primary hover:text-white transition-all" />
+      </Carousel>
+    </div>
+  )
+}
+
+// =======================
+// Footer Component
+// =======================
+const Footer = () => {
+  return (
+    <footer className="w-full border-t bg-background mt-20">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 py-12">
+          {/* Company Info */}
+          <div className="space-y-4">
+            <div className="flex items-start space-x-2">
+              <Link href="/" className="flex items-center gap-2">
+                <Image src="/logo.png" alt="Logo" width={60} height={60} />
+                <span className="text-xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                  TalentHub
+                </span>
+              </Link>
+            </div>
+            <p className="text-muted-foreground max-w-xs">
+              Connecting talented professionals with amazing opportunities. Find your dream job or the perfect candidate.
+            </p>
+            <div className="flex space-x-3">
+              <Button variant="outline" size="icon" className="rounded-full"><Facebook className="h-4 w-4" /></Button>
+              <Button variant="outline" size="icon" className="rounded-full"><Twitter className="h-4 w-4" /></Button>
+              <Button variant="outline" size="icon" className="rounded-full"><LinkedinIcon className="h-4 w-4" /></Button>
+              <Button variant="outline" size="icon" className="rounded-full"><Instagram className="h-4 w-4" /></Button>
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Quick Links</h3>
+            <div className="space-y-2">
+              <Link href="/jobs" className="block text-muted-foreground hover:text-primary transition-colors">Browse Jobs</Link>
+              <Link href="/companies" className="block text-muted-foreground hover:text-primary transition-colors">Companies</Link>
+              <Link href="/post-job" className="block text-muted-foreground hover:text-primary transition-colors">Post a Job</Link>
+              <Link href="/career-advice" className="block text-muted-foreground hover:text-primary transition-colors">Career Advice</Link>
+            </div>
+          </div>
+
+          {/* For Job Seekers */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">For Job Seekers</h3>
+            <div className="space-y-2">
+              <Link href="/create-profile" className="block text-muted-foreground hover:text-primary transition-colors">Create Profile</Link>
+              <Link href="/job-alerts" className="block text-muted-foreground hover:text-primary transition-colors">Job Alerts</Link>
+              <Link href="/resume-builder" className="block text-muted-foreground hover:text-primary transition-colors">Resume Builder</Link>
+              <Link href="/salary-guide" className="block text-muted-foreground hover:text-primary transition-colors">Salary Guide</Link>
+            </div>
+          </div>
+
+          {/* Newsletter */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Stay Updated</h3>
+            <p className="text-muted-foreground">Subscribe to our newsletter for the latest job opportunities and career tips.</p>
+            <div className="space-y-2">
+              <Input type="email" placeholder="Enter your email" className="w-full" />
+              <Button className="w-full"><Mail className="h-4 w-4 mr-2" /> Subscribe</Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Contact Info */}
+        <div className="border-t pt-8 pb-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-muted-foreground">
+            <div className="flex items-center space-x-2"><MapPin className="h-4 w-4" /><span>123 Job Street, Career City, CC 12345</span></div>
+            <div className="flex items-center space-x-2"><Phone className="h-4 w-4" /><span>+1 (555) 123-4567</span></div>
+            <div className="flex items-center space-x-2"><Mail className="h-4 w-4" /><span>hello@TalentHub.com</span></div>
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="border-t py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
+          <div className="flex items-center">
+            <p>© {new Date().getFullYear()} TalentHub. Made with</p>
+            <Heart className="h-4 w-4 mx-1 text-red-500 fill-current" />
+            <p>for job seekers and employers.</p>
+          </div>
+          <nav className="flex items-center gap-6">
+            <Link href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-primary transition-colors">Terms of Service</Link>
+            <Link href="/contact" className="hover:text-primary transition-colors">Contact</Link>
+            <Link href="/sitemap" className="hover:text-primary transition-colors">Sitemap</Link>
+          </nav>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+// =======================
+// Hero Component
 // =======================
 const Hero = ({
   badge = "🚀 Featured Jobs",
   heading = "Find Your Dream Tech Job",
   description = "Discover thousands of job opportunities from top companies. Whether you're a developer, designer, or product manager, we've got the perfect role for you.",
-  buttons = {
-    primary: { text: "Browse All Jobs", url: "/jobs" },
-    secondary: { text: "Post a Job", url: "/jobs/create" },
+  buttons = { 
+    primary: { text: "Browse All Jobs", url: "/jobs" }, 
+    secondary: { text: "Post a Job", url: "/employer/post-job" } 
   },
-  featuredJobs = [
-    {
-      id: "1",
-      title: "Senior Frontend Developer",
-      company: "TechCorp Inc.",
-      location: "San Francisco, CA (Remote)",
-      salary: "$120,000 - $150,000",
-      type: "Full-time",
-      posted: "2 hours ago",
-      logo: "https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=64&h=64&fit=crop&crop=face",
-      featured: true,
-      skills: ["React", "TypeScript", "Next.js", "Tailwind"]
-    },
-    {
-      id: "2",
-      title: "Full Stack Engineer",
-      company: "StartupXYZ",
-      location: "New York, NY",
-      salary: "$100,000 - $130,000",
-      type: "Full-time",
-      posted: "5 hours ago",
-      logo: "https://images.unsplash.com/photo-1569003339405-ea396a5a8a90?w=64&h=64&fit=crop&crop=face",
-      skills: ["Node.js", "React", "MongoDB", "AWS"]
-    },
-    {
-      id: "3",
-      title: "UX/UI Designer",
-      company: "DesignStudio",
-      location: "Austin, TX (Hybrid)",
-      salary: "$85,000 - $110,000",
-      type: "Full-time",
-      posted: "1 day ago",
-      logo: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=64&h=64&fit=crop&crop=face",
-      skills: ["Figma", "Sketch", "Adobe XD", "Prototyping"]
-    }
-  ],
-  testimonials = [
-    {
-      id: "1",
-      name: "Sarah Johnson",
-      role: "Frontend Developer",
-      company: "Google",
-      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=64&h=64&fit=crop&crop=face",
-      content: "Found my dream job in just 2 weeks! The application process was smooth and the opportunities were exactly what I was looking for.",
-      rating: 5
-    },
-    {
-      id: "2",
-      name: "Michael Chen",
-      role: "Product Manager",
-      company: "Microsoft",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=face",
-      content: "As an employer, the quality of candidates we've found through this platform has been exceptional. Highly recommended!",
-      rating: 5
-    },
-    {
-      id: "3",
-      name: "Emily Rodriguez",
-      role: "UX Designer",
-      company: "Apple",
-      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=64&h=64&fit=crop&crop=face",
-      content: "The personalized job recommendations helped me discover opportunities I wouldn't have found elsewhere. Landed my perfect role!",
-      rating: 5
-    }
-  ]
+  featuredJobs = mockFeaturedJobs
 }: HeroProps) => {
-  // =======================
-  // Navbar State
-  // =======================
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-
-
   const navLinks = [
     { href: "/jobs", label: "Browse Jobs" },
+  
   ];
 
-
   return (
-    <div className="relative  top-4">
+    <div className="relative top-4">
       {/* ======================= Navbar ======================= */}
       <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur border-b supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto flex items-center justify-between py-1  md:px-0">
-          {/* Logo & Mobile Toggle */}
+        <div className="container mx-auto flex items-center justify-between py-1 md:px-0">
           <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
+            <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
               {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
             <Link href="/" className="flex items-center gap-2 pl-5">
@@ -194,7 +458,6 @@ const Hero = ({
             </Link>
           </div>
 
-          {/* Desktop Search */}
           <div className="hidden md:flex flex-1 max-w-md mx-8">
             <div className="relative w-full">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -202,14 +465,13 @@ const Hero = ({
             </div>
           </div>
 
-          {/* Desktop Nav */}
           <nav className="hidden md:flex items-center space-x-6">
             {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
+              <Link 
+                key={link.href} 
+                href={link.href} 
                 className={cn(
-                  "text-sm font-medium transition-colors hover:text-primary",
+                  "text-sm font-medium transition-colors hover:text-primary", 
                   pathname === link.href ? "text-primary" : "text-muted-foreground"
                 )}
               >
@@ -218,30 +480,20 @@ const Hero = ({
             ))}
           </nav>
 
-          {/* Actions */}
-          <div className=" items-center space-x-3 hidden md:flex">
-            <Button variant="ghost" size="icon" className="md:hidden">
-              <Search className="h-5 w-5" />
-            </Button>
-
+          <div className="items-center space-x-3 hidden md:flex">
             <div className="flex items-center space-x-2">
-              <Button asChild size="sm" className="">
-                <Link href="/login" className="flex items-center gap-1 px-5">
-                  Login
-                </Link>
+              <Button asChild size="sm">
+                <Link href="/login" className="flex items-center gap-1 px-5">Login</Link>
               </Button>
               <Button asChild size="sm" variant="outline">
-                <Link href="/register" className="flex items-center gap-1 px-6">
-                  Register
-                </Link>
+                <Link href="/register" className="flex items-center gap-1 px-6">Register</Link>
               </Button>
             </div>
-
           </div>
+
           <ModeToggle />
         </div>
 
-        {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden border-t">
             <div className="container mx-auto py-4 space-y-4 px-4">
@@ -251,47 +503,39 @@ const Hero = ({
               </div>
               <nav className="space-y-2">
                 {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
+                  <Link 
+                    key={link.href} 
+                    href={link.href} 
                     className={cn(
-                      "block py-2 text-sm font-medium transition-colors hover:text-primary",
+                      "block py-2 text-sm font-medium transition-colors hover:text-primary", 
                       pathname === link.href ? "text-primary" : "text-muted-foreground"
-                    )}
+                    )} 
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {link.label}
                   </Link>
                 ))}
-
                 <div className="flex flex-col gap-2 mt-4">
                   <Button asChild size="sm" className="w-full">
-                    <Link href="/login" className="flex items-center gap-1">
-                      <LogIn className="h-4 w-4" /> Login
-                    </Link>
+                    <Link href="/login" className="flex items-center gap-1"><LogIn className="h-4 w-4" /> Login</Link>
                   </Button>
                   <Button asChild size="sm" className="w-full">
-                    <Link href="/register" className="flex items-center gap-1">
-                      <UserPlus className="h-4 w-4" /> Register
-                    </Link>
+                    <Link href="/register" className="flex items-center gap-1"><UserPlus className="h-4 w-4" /> Register</Link>
                   </Button>
                 </div>
-
               </nav>
             </div>
           </div>
         )}
       </header>
 
-      <div className="pointer-events-none absolute inset-0 -z-30">
+      <div className="pointer-events-none absolute inset-0 -z-30"><Squares /></div>
 
-        <Squares />
-      </div>
       {/* ======================= Hero Section ======================= */}
-      <section className="w-full ">
+      <section className="w-full">
         <div className="container mx-auto px-4 py-12 md:py-20">
           <div className="grid items-center gap-12 lg:grid-cols-2 mb-16 bg-background/60 p-7 rounded-3xl">
-            {/* Text Content */}
+            {/* Text */}
             <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
               {badge && (
                 <Badge variant="secondary" className="mb-4 md:mb-6 px-3 py-1 md:px-4 md:py-2 text-xs md:text-sm">
@@ -301,27 +545,10 @@ const Hero = ({
               <h1 className="my-4 md:my-6 text-3xl md:text-4xl lg:text-6xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text dark:text-white">
                 {heading}
               </h1>
-              <p className=" mb-6 md:mb-8 max-w-xl text-base md:text-lg lg:text-xl">
-                {description}
-              </p>
-
-              <div className="flex w-full flex-col justify-center gap-3 sm:flex-row lg:justify-start">
-                {buttons.primary && (
-                  <Button asChild size="lg" className="w-full sm:w-auto">
-                    <a href={buttons.primary.url}>
-                      {buttons.primary.text} <ArrowRight className="ml-2 size-4" />
-                    </a>
-                  </Button>
-                )}
-                {buttons.secondary && (
-                  <Button asChild variant="outline" size="lg" className="w-full sm:w-auto">
-                    <a href={buttons.secondary.url}>{buttons.secondary.text}</a>
-                  </Button>
-                )}
-              </div>
-
+              <p className="mb-6 md:mb-8 max-w-xl text-base md:text-lg lg:text-xl">{description}</p>
+              
               {/* Stats */}
-              <div className="mt-8 md:mt-12 grid grid-cols-3 gap-4 md:gap-8 text-center lg:text-left">
+              <div className="mt-8 md:mt-12 grid grid-cols-3 gap-4 md:gap-8 text-center lg:text-left mb-6">
                 <div>
                   <div className="text-xl md:text-2xl font-bold text-primary">10K+</div>
                   <div className="text-xs md:text-sm text-muted-foreground">Jobs Available</div>
@@ -335,210 +562,51 @@ const Hero = ({
                   <div className="text-xs md:text-sm text-muted-foreground">Success Rate</div>
                 </div>
               </div>
+              
+              <div className="flex w-full flex-col justify-center gap-3 sm:flex-row lg:justify-start">
+                {buttons.primary && (
+                  <Button asChild size="lg" className="w-full sm:w-auto">
+                    <a href={buttons.primary.url}>{buttons.primary.text} <ArrowRight className="ml-2 size-4" /></a>
+                  </Button>
+                )}
+                {buttons.secondary && (
+                  <Button asChild variant="outline" size="lg" className="w-full sm:w-auto">
+                    <a href={buttons.secondary.url}>{buttons.secondary.text}</a>
+                  </Button>
+                )}
+              </div>
             </div>
 
             {/* Hero Image */}
             <div className="relative order-first lg:order-last">
               <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-2xl blur-3xl"></div>
-              <img
-                src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&h=400&fit=crop"
-                alt="Team collaboration"
-                className="relative rounded-2xl shadow-2xl w-full h-48 md:h-64 lg:h-80 object-cover"
+              <img 
+                src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&h=400&fit=crop" 
+                alt="Team collaboration" 
+                className="relative rounded-2xl shadow-2xl w-full h-48 md:h-64 lg:h-80 object-cover" 
               />
             </div>
           </div>
 
-          {/* ======================= Featured Jobs ======================= */}
+          {/* ======================= Featured Jobs Carousel ======================= */}
           <div className="py-12 md:py-16">
-            <div className="text-center mb-8 md:mb-12">
-              <h2 className="text-2xl md:text-3xl font-bold mb-4">Featured Jobs</h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto text-base md:text-lg">
-                Hand-picked opportunities from top companies looking for talent like you
-              </p>
-            </div>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {featuredJobs.map((job) => (
-                <Card key={job.id} className={`group hover:shadow-lg transition-all duration-300 ${job.featured ? 'border-primary/20 ring-1 ring-primary/10' : ''}`}>
-                  <CardHeader className="pb-4">
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center space-x-3">
-                        <img
-                          src={job.logo}
-                          alt={job.company}
-                          className="w-10 h-10 md:w-12 md:h-12 rounded-lg object-cover border"
-                        />
-                        <div className="min-w-0">
-                          <h3 className="font-semibold text-base md:text-lg group-hover:text-primary transition-colors truncate">
-                            {job.title}
-                          </h3>
-                          <p className="text-muted-foreground flex items-center text-sm">
-                            <Building2 className="w-3 h-3 md:w-4 md:h-4 mr-1 flex-shrink-0" /> {job.company}
-                          </p>
-                        </div>
-                      </div>
-                      {job.featured && <Badge variant="default" className="ml-2 text-xs">Featured</Badge>}
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-2">
-                    <div className="flex items-center text-xs md:text-sm text-muted-foreground">
-                      <MapPin className="w-3 h-3 md:w-4 md:h-4 mr-2 flex-shrink-0" />
-                      {job.location}
-                    </div>
-                    <div className="flex items-center text-xs md:text-sm text-muted-foreground">
-                      <DollarSign className="w-3 h-3 md:w-4 md:h-4 mr-2 flex-shrink-0" /> {job.salary}
-                    </div>
-                    <div className="flex items-center text-xs md:text-sm text-muted-foreground">
-                      <Clock className="w-3 h-3 md:w-4 md:h-4 mr-2 flex-shrink-0" /> {job.type} • {job.posted}
-                    </div>
-                    <div className="flex flex-wrap gap-1 pt-2">
-                      {job.skills.slice(0, 3).map((skill, i) => (
-                        <Badge key={i} variant="secondary" className="text-xs">{skill}</Badge>
-                      ))}
-                      {job.skills.length > 3 && <Badge variant="outline" className="text-xs">+{job.skills.length - 3} more</Badge>}
-                    </div>
-                  </CardContent>
-                  <CardFooter className="flex justify-between items-center pt-4 gap-2">
-                    <Button variant="outline" size="sm" className="text-xs flex-1">Save</Button>
-                    <Button size="sm" className="text-xs flex-1">Apply</Button>
-                  </CardFooter>
-                </Card>
-              ))}
-            </div>
-            <div className="text-center mt-8">
-              <Button variant="ghost" className="group">
-                View All Featured Jobs
-                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </div>
+            <FeaturedJobsCarousel jobs={featuredJobs} />
           </div>
 
-          {/* ======================= Testimonials ======================= */}
+          {/* ======================= Testimonials Section ======================= */}
           <div className="py-12 md:py-16">
-            <div className="text-center mb-8 md:mb-12">
-              <h2 className="text-2xl md:text-3xl font-bold mb-4">Trusted by Thousands</h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto text-base md:text-lg">
-                Join thousands of job seekers and employers who have found success with our platform
-              </p>
-            </div>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {testimonials.map((t) => (
-                <Card key={t.id} className="group hover:shadow-lg transition-all duration-300">
-                  <CardContent className="p-6">
-                    <div className="flex items-start mb-4">
-                      <Quote className="h-6 w-6 text-primary/60 flex-shrink-0" />
-                      <div className="ml-2">
-                        <div className="flex mb-2">
-                          {[...Array(5)].map((_, i) => (
-                            <Star key={i} className={`h-4 w-4 ${i < t.rating ? "text-yellow-400 fill-current" : "text-muted-foreground"}`} />
-                          ))}
-                        </div>
-                        <p className="text-sm text-muted-foreground italic">
-                          &quot;{t.content}&quot;
-                        </p>
-
-                      </div>
-                    </div>
-                    <div className="flex items-center mt-4 pt-4 border-t">
-                      <Avatar className="h-10 w-10">
-                        <AvatarImage src={t.avatar} alt={t.name} />
-                        <AvatarFallback>{t.name.charAt(0)}</AvatarFallback>
-                      </Avatar>
-                      <div className="ml-3">
-                        <h4 className="text-sm font-semibold">{t.name}</h4>
-                        <p className="text-xs text-muted-foreground">{t.role} at {t.company}</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+            <TestimonialsSection
+              title="Trusted by developers worldwide"
+              description="Join thousands of developers who are already building their careers with TalentHub"
+              testimonials={testimonials}
+              speed={100}
+            />
           </div>
         </div>
       </section>
 
       {/* ======================= Footer ======================= */}
-      <footer className="w-full border-t bg-background mt-20">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 py-12">
-            {/* Company Info */}
-            <div className="space-y-4">
-              <div className="flex items-start space-x-2">
-                <Link href="/" className="flex items-center gap-2">
-                  <Image src="/logo.png" alt="Logo" width={60} height={60} />
-                  <span className="text-xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-                    TalentHub
-                  </span>
-                </Link>
-              </div>
-              <p className="text-muted-foreground max-w-xs">
-                Connecting talented professionals with amazing opportunities. Find your dream job or the perfect candidate.
-              </p>
-              <div className="flex space-x-3">
-                <Button variant="outline" size="icon" className="rounded-full"><Facebook className="h-4 w-4" /></Button>
-                <Button variant="outline" size="icon" className="rounded-full"><Twitter className="h-4 w-4" /></Button>
-                <Button variant="outline" size="icon" className="rounded-full"><LinkedinIcon className="h-4 w-4" /></Button>
-                <Button variant="outline" size="icon" className="rounded-full"><Instagram className="h-4 w-4" /></Button>
-              </div>
-            </div>
-
-            {/* Quick Links */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Quick Links</h3>
-              <div className="space-y-2">
-                <Link href="/jobs" className="block text-muted-foreground hover:text-primary transition-colors">Browse Jobs</Link>
-                <Link href="/companies" className="block text-muted-foreground hover:text-primary transition-colors">Companies</Link>
-                <Link href="/post-job" className="block text-muted-foreground transition-colors">Post a Job</Link>
-                <Link href="/career-advice" className="block text-muted-foreground hover:text-primary transition-colors">Career Advice</Link>
-              </div>
-            </div>
-
-            {/* For Job Seekers */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">For Job Seekers</h3>
-              <div className="space-y-2">
-                <Link href="/create-profile" className="block text-muted-foreground hover:text-primary transition-colors">Create Profile</Link>
-                <Link href="/job-alerts" className="block text-muted-foreground hover:text-primary transition-colors">Job Alerts</Link>
-                <Link href="/resume-builder" className="block text-muted-foreground hover:text-primary transition-colors">Resume Builder</Link>
-                <Link href="/salary-guide" className="block text-muted-foreground hover:text-primary transition-colors">Salary Guide</Link>
-              </div>
-            </div>
-
-            {/* Newsletter */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Stay Updated</h3>
-              <p className="text-muted-foreground">Subscribe to our newsletter for the latest job opportunities and career tips.</p>
-              <div className="space-y-2">
-                <Input type="email" placeholder="Enter your email" className="w-full" />
-                <Button className="w-full"><Mail className="h-4 w-4 mr-2" /> Subscribe</Button>
-              </div>
-            </div>
-          </div>
-
-          {/* Contact Info */}
-          <div className="border-t pt-8 pb-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-muted-foreground">
-              <div className="flex items-center space-x-2"><MapPin className="h-4 w-4" /><span>123 Job Street, Career City, CC 12345</span></div>
-              <div className="flex items-center space-x-2"><Phone className="h-4 w-4" /><span>+1 (555) 123-4567</span></div>
-              <div className="flex items-center space-x-2"><Mail className="h-4 w-4" /><span>hello@TalentHub.com</span></div>
-            </div>
-          </div>
-
-          {/* Bottom Bar */}
-          <div className="border-t py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-            <div className="flex items-center">
-              <p>© {new Date().getFullYear()} TalentHub. Made with</p>
-              <Heart className="h-4 w-4 mx-1 text-red-500 fill-current" />
-              <p>for job seekers and employers.</p>
-            </div>
-            <nav className="flex items-center gap-6">
-              <Link href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link>
-              <Link href="/terms" className="hover:text-primary transition-colors">Terms of Service</Link>
-              <Link href="/contact" className="hover:text-primary transition-colors">Contact</Link>
-              <Link href="/sitemap" className="hover:text-primary transition-colors">Sitemap</Link>
-            </nav>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

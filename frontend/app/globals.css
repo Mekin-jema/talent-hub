@@ -26,6 +26,42 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --animate-marquee: marquee var(--duration) linear infinite;
+  --color-brand-foreground: var(----brand-foreground);
+  --color-brand: var(----brand);
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+  @keyframes marquee {
+  from {
+    transform: translateX(0);
+    }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+  @keyframes marquee {
+  from {
+    transform: translateX(0);
+    }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+  @keyframes marquee {
+  from {
+    transform: translateX(0);
+    }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
 }
 
 /* Light mode */
@@ -64,6 +100,8 @@
   --sidebar-accent-foreground: #ffffff;
   --sidebar-border: #E5E7EB;
   --sidebar-ring: #1E40AF;
+  --brand: hsl(266 100% 50%);
+  --brand-foreground: hsl(270 100% 98%);
 }
 
 /* Dark mode */
@@ -104,6 +142,8 @@
   --sidebar-accent-foreground: #1F2937;
   --sidebar-border: #374151;
   --sidebar-ring: #FFFFFF;
+  --brand: hsl(266 70% 60%);
+  --brand-foreground: hsl(270 100% 98%);
 }
 
 /* Base layer for all elements */
@@ -124,5 +164,14 @@
 
   button {
     transition: background-color 0.3s, color 0.3s;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
