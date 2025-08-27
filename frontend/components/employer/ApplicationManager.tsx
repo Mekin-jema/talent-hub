@@ -81,6 +81,7 @@ const ApplicationManager = ({ applications, jobs, selectedJobId, onJobSelect }: 
       await updateApplicationStatus(applicationId, newStatus);
       toast.success(`Application status updated to ${newStatus.toLowerCase()}`);
     } catch (error) {
+      console.error('Error updating application status:', error);
       toast.error('Failed to update application status');
     }
   };

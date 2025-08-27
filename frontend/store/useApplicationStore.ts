@@ -7,8 +7,8 @@ import { useAuthStore } from './useAuthStore';
 import { ApplicationFormValues } from '@/validation/application.validation';
 import { Job } from '@/types';
 
-// const API_BASE_URL = process.env.BACKEND_API_URL || 'https://talent-hub-1-91qb.onrender.com/api/v1';
-const API_BASE_URL = 'http://localhost:5000/api/v1';
+const API_BASE_URL = process.env.BACKEND_API_URL || 'https://talent-hub-1-91qb.onrender.com/api/v1';
+// const API_BASE_URL = 'http://localhost:5000/api/v1';
 const APPLICATIONS_API_URL = `${API_BASE_URL}/applications`;
 
 

@@ -20,7 +20,6 @@ import { useRouter } from "next/navigation";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function SignupPage() {
-  const [isLoading, setIsLoading] = useState(false);
   const [isGithubPending, startGithubTransition] = useTransition();
   const [isGooglePending, startGoogleTransition] = useTransition();
   const router = useRouter();
@@ -33,8 +32,8 @@ export default function SignupPage() {
       password: "",
     },
   });
-  // auth sore
-  const {signup}=useAuthStore()
+  // auth store
+  const {signup,loading}=useAuthStore()
 
   // ---- Social Logins ----
   const signUpWithGithub = async () => {
@@ -64,9 +63,7 @@ export default function SignupPage() {
     } catch (error) {
       console.error(error)
       toast.error("Unexpected error occurred");
-    } finally {
-      setIsLoading(false);
-    }
+    } 
   };
 
   return (
@@ -165,8 +162,8 @@ export default function SignupPage() {
                 </Select>
               </div>
 
-              <Button type="submit" disabled={isLoading} className="w-full ">
-                {isLoading ? "Signing up..." : "Sign Up"}
+              <Button type="submit" disabled={loading} className="w-full ">
+                {loading ? "Signing up..." : "Sign Up"}
               </Button>
             </div>
           </div>

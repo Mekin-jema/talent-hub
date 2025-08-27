@@ -1,4 +1,4 @@
-import { Building2, MapPin, DollarSign, Clock, CheckCircle, Bookmark, BookmarkCheck, Share, Users } from "lucide-react";
+import { Building2, MapPin, DollarSign, Clock, CheckCircle, Bookmark, BookmarkCheck, Share } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatDistanceToNow } from "date-fns";

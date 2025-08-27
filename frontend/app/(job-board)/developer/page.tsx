@@ -1,5 +1,5 @@
 "use client"
-import { useApplicationStore } from '@/store/useApplicationStore'
+import { Application, useApplicationStore } from '@/store/useApplicationStore'
 import { Loader, Calendar, Building2, MapPin, Clock, CheckCircle, XCircle, Clock4, UserCheck, Circle, Filter, Search, FileText, ChevronDown, ChevronUp, BarChart3, ArrowRight } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 
@@ -39,7 +39,7 @@ const StatusBadge = ({ status }: { status: string }) => {
 }
 
 // Application Card Component
-const ApplicationCard = ({ application }: { application: any }) => {
+const ApplicationCard = ({ application }: { application: Application }) => {
   const [expanded, setExpanded] = useState(false);
   
   return (
@@ -304,7 +304,7 @@ const DeveloperDashboard = () => {
         <div>
           <Clock size={64} className="mx-auto mb-4 opacity-50" />
           <p className="text-lg font-medium text-card-foreground mb-2">No {filter.toLowerCase()} applications</p>
-          <p className="text-muted-foreground">You don't have any applications with this status</p>
+          <p className="text-muted-foreground"> You Don&apos;t have any applications with this status</p>
         </div>
       )}
     </div>
