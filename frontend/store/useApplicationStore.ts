@@ -5,28 +5,14 @@ import { toast } from 'sonner';
 import { handleError } from '@/lib/error-handler';
 import { useAuthStore } from './useAuthStore';
 import { ApplicationFormValues } from '@/validation/application.validation';
-import { Job } from '@/types';
+import { Application, Job } from '@/types';
 
 const API_BASE_URL = process.env.BACKEND_API_URL || 'https://talent-hub-2-flkq.onrender.com/api/v1';
 // const API_BASE_URL = 'http://localhost:5000/api/v1';
 const APPLICATIONS_API_URL = `${API_BASE_URL}/applications`;
 
 
-export interface Application {
-  id: string;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
-  resumeUrl?: string | null;
-  coverLetter?: string | null;
-  extraData?: Record<string, any>;
-  job: Job;
-  applicant: { id: string; fullName: string; email: string };
-  salaryExpectation?: string;                   // Optional salary expectation
-  noticePeriod?: string;                          // Optional notice period
 
-  
-}
 
 interface ApplicationStoreState {
   applications: Application[];

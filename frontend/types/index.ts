@@ -1,11 +1,25 @@
-import { Application } from "@/store/useApplicationStore";
 
 export interface Skill {
-  id:String,
-  name:String
-  jobId:String
+  id: string;
+  name: string;
+  jobId: string;
 }
 
+export interface Application {
+  id: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  resumeUrl?: string | null;
+  coverLetter?: string | null;
+  extraData?: Record<string, any>;
+  job: Job;
+  applicant: { id: string; fullName: string; email: string };
+  salaryExpectation?: string;                   // Optional salary expectation
+  noticePeriod?: string;                          // Optional notice period
+
+  
+}
 export interface Job {
   id: string;
   title: string;
@@ -74,3 +88,70 @@ export interface JobApplication {
   resume: Resume;
 }
 
+
+
+export interface AdminJob {
+  id: string;
+  title: string;
+  type: string;
+  location: string;
+  salary: string;
+  description: string;
+  requirements: string[];
+  responsibilities: string[];
+  aboutCompany: string;
+  logo?: string;
+  category: string;
+  featured: boolean;
+  posted: string;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
+  createdBy: {
+    id: string;
+    fullName: string;
+    email: string;
+  };
+  _count: {
+    applications: number;
+  };
+}
+
+export interface AdminApplication {
+  id: string;
+  status: ApplicationStatus
+  createdAt: string;
+  updatedAt: string;
+  resumeUrl?: string | null;
+  coverLetter?: string | null;
+  salaryExpectation?: string;
+  noticePeriod?: string;
+  job: {
+    id: string;
+    title: string;
+    createdBy: {
+      id: string;
+      fullName: string;
+    };
+  };
+  applicant: {
+    id: string;
+    fullName: string;
+    email: string;
+  };
+}
+
+export enum ApplicationStatus {
+     APPLIED = "APPLIED",
+    SHORTLISTED = "SHORTLISTED",
+    REJECTED = "REJECTED",
+    INTERVIEW = "INTERVIEW",
+    HIRED = "HIRED",
+}
+
+
+export enum Role {
+  ADMIN = 'ADMIN',
+  DEVELOPER = 'DEVELOPER',
+  EMPLOYER = 'EMPLOYER',
+}
