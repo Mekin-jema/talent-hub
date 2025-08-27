@@ -9,8 +9,7 @@ import StatsOverview from './StatsOverview';
 import JobsManager from './JobsManager';
 import NotificationPanel from './NotificationPanel';
 import { Skeleton } from '../ui/skeleton';
-import { Job } from '@/types';
-import { Application } from '@/store/useApplicationStore';
+import { Application, Job } from '@/types';
 import ApplicationManager from './ApplicationManager';
 
 

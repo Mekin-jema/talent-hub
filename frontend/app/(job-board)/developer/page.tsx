@@ -1,5 +1,6 @@
 "use client"
-import { Application, useApplicationStore } from '@/store/useApplicationStore'
+import {  useApplicationStore } from '@/store/useApplicationStore'
+import { Application } from '@/types'
 import { Loader, Calendar, Building2, MapPin, Clock, CheckCircle, XCircle, Clock4, UserCheck, Circle, Filter, Search, FileText, ChevronDown, ChevronUp, BarChart3, ArrowRight } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 

@@ -2,8 +2,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Briefcase, Users, Calendar, Bell } from 'lucide-react';
 import { Badge } from '../ui/badge';
-import { Application } from '@/store/useApplicationStore';
-import { Job } from '@/types';
+import { Application, Job } from '@/types';
 
 export interface Notification {
   id: string;

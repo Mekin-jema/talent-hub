@@ -7,9 +7,9 @@ import { useEffect, useMemo } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useJobStore } from '@/store/useJobStore';
-import { Application, useApplicationStore } from '@/store/useApplicationStore';
+import { useApplicationStore } from '@/store/useApplicationStore';
 import { Notification } from '@/components/employer/StatsOverview';
-import { Job } from '@/types';
+import { Application, Job } from '@/types';
 
 
 export const mockNotifications: Notification[] = [

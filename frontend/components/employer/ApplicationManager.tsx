@@ -4,8 +4,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, Filter, Mail, Download, ChevronDown, ChevronUp, FileText, Calendar, MapPin, Building2, Clock4, UserCheck, XCircle, CheckCircle, Circle } from 'lucide-react';
-import { Application, useApplicationStore } from '@/store/useApplicationStore';
-import { Job } from '@/types';
+import { useApplicationStore } from '@/store/useApplicationStore';
+import { Application, Job } from '@/types';
 import { toast } from 'sonner';
 
 // Status badge component to show application status with appropriate styling

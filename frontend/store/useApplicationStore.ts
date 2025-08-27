@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import { handleError } from '@/lib/error-handler';
 import { useAuthStore } from './useAuthStore';
 import { ApplicationFormValues } from '@/validation/application.validation';
-import { Application, Job } from '@/types';
+import { Application } from '@/types';
 
 const API_BASE_URL = process.env.BACKEND_API_URL || 'https://talent-hub-2-flkq.onrender.com/api/v1';
 // const API_BASE_URL = 'http://localhost:5000/api/v1';
