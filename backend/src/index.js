@@ -14,11 +14,31 @@ dotenv.config();
 const prisma = new PrismaClient();
 const app = express();
 
+// Allowed origins
+const allowedOrigins = [
+  'https://talent-hub-fawn.vercel.app', // frontend
+  'http://localhost:3000',               // local dev
+];
+
 // Middleware
 app.use(helmet());
-app.use(cors());
 app.use(morgan('combined'));
 app.use(express.json());
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // allow Postman, curl
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true,
+}));
+
+// Enable pre-flight requests for all routes
+app.options('*', cors());
 
 // Routes
 app.use('/api/v1', routes);
