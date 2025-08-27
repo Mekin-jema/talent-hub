@@ -6,7 +6,7 @@
 "scripts": {
   "dev": "nodemon src/index.js",
   "start": "node src/index.js",
-  "build": "echo 'No build step for JS, ready to run'", 
+  "build": "npm install && npx prisma generate && npm run seed",
   "db:generate": "npx prisma generate",
   "db:push": "npx prisma db push",
   "db:studio": "npx prisma studio",
