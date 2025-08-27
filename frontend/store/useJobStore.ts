@@ -6,7 +6,8 @@ import { handleError } from '@/lib/error-handler';
 import { JobFormValues } from '@/validation/job.validation';
 import { useAuthStore } from './useAuthStore';
 import { Job } from '@/types';
-const API_BASE_URL = process.env.BACKEND_API_URL || 'https://talent-hub-1-91qb.onrender.com/api/v1';
+const API_BASE_URL = process.env.BACKEND_API_URL || 'https://talent-hub-2-flkq.onrender.com/api/v1';
+
 
 const JOBS_API_URL = `${API_BASE_URL}/jobs`;
 

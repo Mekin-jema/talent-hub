@@ -5,7 +5,9 @@ import { toast } from 'sonner';
 import { handleError } from '@/lib/error-handler';
 import { SignupFormType } from '@/validation/signup.validation';
 import { loginFormType } from '@/validation/login.validation';
-const API_BASE_URL = process.env.BACKEND_API_URL || 'https://talent-hub-1-91qb.onrender.com/api/v1';
+
+const API_BASE_URL = process.env.BACKEND_API_URL || 'https://talent-hub-2-flkq.onrender.com/api/v1';
+
 
 const AUTH_API_URL = `${API_BASE_URL}/auth`;
 
