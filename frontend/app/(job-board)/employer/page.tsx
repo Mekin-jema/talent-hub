@@ -12,7 +12,7 @@ import { Notification } from '@/components/employer/StatsOverview';
 import { Application, Job } from '@/types';
 
 
-export const mockNotifications: Notification[] = [
+const mockNotifications: Notification[] = [
   {
     id: "1",
     message: "Your job application has been submitted successfully.",
