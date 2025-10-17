@@ -17,7 +17,9 @@ const app = express();
 // Allowed origins
 const allowedOrigins = [
   'https://talent-hub-fawn.vercel.app', // frontend
-  'http://localhost:3000',               // local dev
+  'http://localhost:3002',  
+  'https://talent-hub-git-main-mekin-jemals-projects.vercel.app', // local dev
+  'http://localhost:3000' // backend
 ];
 
 // Middleware
